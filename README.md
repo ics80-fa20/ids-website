@@ -1,5 +1,5 @@
 ## ICS 80
-<img src="img/ids-logo.svg" alt="Introdata.science logo with a human figure juggling charts, a computer, a database and a book" width="150" align = "right"/>
+<img src="img/ids-logo.png" alt="Introdata.science logo with a human figure juggling charts, a computer, a database and a book" width="150" align = "right"/>
 
 
   
