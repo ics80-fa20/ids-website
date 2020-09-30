@@ -3,7 +3,7 @@
 
 
   
-### Introduction to Probability and Statistics for Computer Science 
+### Introduction Data Science 
 University of California Irvine 
 
 Fall 2020 
@@ -27,3 +27,4 @@ Everything on this website except the videos are licensed under [Creative Common
 
 <img src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" alt="logo for CC-NC-SA 4 license"/>
 
+The videos are copyrighted and all rights are reserved.
