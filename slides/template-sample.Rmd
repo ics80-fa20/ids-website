@@ -1,5 +1,5 @@
 ---
-title: "A very cool topic about data science"
+title: "Sample Template for my slides"
 author: "Dr. Mine Dogucu"
 output: 
   xaringan::moon_reader:
