@@ -1,0 +1,83 @@
+---
+title: "Data Types"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: slide-style.css
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+---
+
+class: title-slide
+
+<br>
+<br>
+.right-panel[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+---
+
+```{r echo = FALSE, message=FALSE}
+library(fivethirtyeight)
+library(openintro)
+library(tidyverse)
+```
+
+
+```{r}
+glimpse(candy_rankings)
+```
+
+---
+
+```{r}
+glimpse(mariokart)
+```
+
+---
+
+class: middle
+
+
+
+`character`: takes string values (e.g. a person's name, address)  
+--
+
+`integer`: integer (single precision)  
+--
+
+`double`: floating decimal (double precision)   
+--
+
+`numeric`: integer or double  
+--
+
+`factor`: categorical variables with different levels  
+--
+
+`logical`: TRUE (1), FALSE (0)  
+
+---
+class: inverse middle
+
+As a data scientist it is .font30[**your**] job to check the type(s) of data that you are working with. Do .font30[**not**]  assume you will work with clean data frames, with clean names, labels, and types.
+
+---
+
+
+```{r echo = FALSE}
+library(titanic)
+```
+
+```{r}
+glimpse(titanic_train)
+```
+
+

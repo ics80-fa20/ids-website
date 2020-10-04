@@ -1,0 +1,150 @@
+---
+title: "Introduction to Data"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: slide-style.css
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+---
+
+class: title-slide
+
+```{r echo = FALSE}
+library(fabricerin)
+```
+
+<br>
+<br>
+.right-panel[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+---
+
+class: middle
+
+
+## Data Frames 
+
+
+
+```{r echo = FALSE, message=FALSE}
+library(magrittr)
+library(dplyr)
+library(fivethirtyeight)
+
+data(bad_drivers)
+candy_rankings <- candy_rankings %>% 
+  select(competitorname, chocolate, fruity, sugarpercent, pricepercent, winpercent)
+```
+
+[Dear Mona, Which State Has the Worst Drivers?](https://fivethirtyeight.com/features/which-state-has-the-worst-drivers/)
+
+---
+
+## Data Frame `bad_driver`  
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/data-matrix.png')
+knitr::include_graphics('img/data-matrix-tail.png')
+```
+
+---
+
+## Data Frame `bad_driver`  
+
+- The data frame has 8 __variables__ (`state`, `num_drivers`, `perc_speeding`, `perc_not_distracted`, `perc_no_previous`, `insurance_premiums`, `losses`). 
+
+- The data frame has 51 __cases__. Each case represents a US state (or District of Columbia). 
+
+---
+
+class: inverse center middle
+
+.font100[functions for data frames]
+
+---
+
+```{r}
+head(bad_drivers)
+```
+
+---
+
+
+```{r}
+tail(bad_drivers)
+```
+
+---
+
+
+```{r}
+glimpse(bad_drivers)
+```
+---
+
+```{r}
+ncol(bad_drivers)
+```
+---
+
+```{r}
+nrow(bad_drivers)
+```
+---
+
+class: center
+
+## Getting to Know the Data Frame in Action
+
+<video width="80%" height="45%%" align = "center" controls>
+  <source src="screencast/1-data-interface.mp4" type="video/mp4">
+</video>
+
+---
+
+class: middle 
+
+## Data Frame for You to Try Out `candy_rankings`
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/data-candy.png')
+knitr::include_graphics('img/data-candy-tail.png')
+```
+
+---
+
+class: center middle
+
+## Bob Ross
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zIbR5TAz2xQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+---
+
+```{r}
+glimpse(bob_ross)
+```
+
+---
+
+class: center middle 
+
+
+##`candy_rankings` vs `bob_ross`
+
+False - 0  
+True - 1
+
+
+
+

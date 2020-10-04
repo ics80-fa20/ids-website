@@ -1,73 +1,257 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>ICS 80</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+<meta charset="utf-8">
+<title>ICS 80</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../style.css">
+<script src="https://kit.fontawesome.com/4145f6a1ca.js"></script> 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!-- function for adding html within html--> 
 
-    <link rel="stylesheet" href="../style.css">
-
-    <script src="https://kit.fontawesome.com/4145f6a1ca.js"></script>
-
-	<link rel="shortcut icon" href="img/favicon.ico" />
-
-
-
-    <!-- function for adding html within html-->
-
-        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-        <script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script> 
+<script>
         $(function () {
             $(".load-html").each(function () {
                 $(this).load(this.dataset.source);
             });
         });
         </script>
+</head>
+<body>
+<div class="load-html"  data-source="navbar.html"></div>
+<div class = "main-text">
+  <h1>Week 1 - Introduction to the Course and Data</h1>
+  Welcome to the course! Before we start learning statistics
+  we will get to know each other, the tools we will use,
+  and the policies of the course.
+  
+  If you have any questions about Week 1 materials please post
+  them on Piazza (you will soon see what Piazza is).
+  
+  If you click on icons such as <i class="fas fa-video" aria-hidden="true"
+      title="Link to lecture video"></i> it would direct you to the appropriate link
+  where the course material lies. <br>
+  <br>
+  <table class="table-striped text-left table-bordered" align = "center">
+    <thead>
+    <th style="width:  3%"></th>
+      <th style="width:  30%"></th>
+      <th style="width:  40%">Notes</th>
+      <th style="width:  8%">Links</th>
+      <th style="width:  15%">Due</th>
+      </thead>
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Welcome to the Course</td>
+      <td></td>
+      <td><a href="https://uci.yuja.com/V/Video?v=1939038&node=7473614&a=998113872&autoplay=1" target = "_blank">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Sign up for Piazza</td>
+      <td></td>
+      <td><a href="https://canvas.eee.uci.edu/courses/30782/external_tools/4740"
+            target = "_blank"><i class="fas fa-link"
+            aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Introduce yourself to your classmates</td>
+      <td></td>
+      <td><a href="https://piazza.com/class/kfp2eupotwhoq?cid=6"
+            target = "_blank"><i class="fas fa-comment"
+            aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Sign up for Gradescope</td>
+      <td>You have been added to the course automatically.</td>
+      <td><a href="https://www.gradescope.com/courses/191961" target ="_blank"> <i class="fas fa-edit" aria-hidden="true"
+            title="External Link to Gradescope" target = "_blank"></i></a></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Introduce yourself to your professor.</td>
+      <td></td>
+      <td><a href="https://www.gradescope.com/courses/191961/assignments/725828" target ="_blank"> <i class="fas fa-edit" aria-hidden="true"
+            title="External Link to Gradescope" target = "_blank"></i></a></td>
+      <td>Oct 8, 11:59 pm</td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td> Getting to Know the Course Website &nbsp; &nbsp; </td>
+      <td>Take time go over the contents of this website, especially read the policies section. Do not forget to bookmark <a href="https:introdata.science">introdata.science</a>.</td>
+      <td></td>
+      <td></td>
+    </tr>
+    
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Syllabus quiz</td>
+      <td>Timed 30 minutes. <a href="https:introdata.science">introdata.science</a>.</td>
+      <td><a href="https://www.gradescope.com/courses/191961/assignments/725864" target ="_blank"> <i class="fas fa-edit" aria-hidden="true"
+            title="External Link to Gradescope" target = "_blank"></i></a></td>
+      <td>Oct 8, 11:59 pm</td>
+    </tr>
+    
+    
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td> Download VPN  &nbsp; &nbsp; </td>
+      <td>Use the instructions to download VPN so that you can access resources such as ICS Hub
+        that are only available on the campus network.</td>
+      <td><a href="https://www.oit.uci.edu/help/vpn/" target = "_blank"> <i class="fas fa-link" aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+	  
 
-  </head>
-  <body>
-
-
-    <div class="load-html"  data-source="navbar.html"></div>
-
-
-    <div class = "main-text">
-
-      <div class="container" >
-        <div class="row" >
-
-          <div class="col text-center">
-            <i class="fas fa-hard-hat" style="font-size:50px; color:#ae8f68; "></i>
-
-          </div>
-        </div>
-        <div class="row">
-
-      <div class="col text-center" >
-        <span style = "font-size:30px">Under Construction</span>
-		  
-
-      </div>
-      </div>
-
-      <hr style="width: 100%;
-      background-color: #ae8f68;
-      height: 1px; border-color : transparent;" />
-
-
-      </div>
-
-
-    </div>
-
-
-    <div class="load-html"  data-source="footer.html"></div>
-
-
-  </body>
+	
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Log in to <a href="hub.ics.uci.edu">ICS Hub</a></td>
+      <td>You need to be connected through VPN or must be on campus. Account activation instructions are in the link. <i class="far fa-hand-point-right"
+            aria-hidden="true"
+            title="Right hand icon"></i></a> </td>
+      <td><a href="https://www.ics.uci.edu/~lab/students/acct_activate.php"
+            target = "_blank"><i class="fas fa-link"
+            aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+	  
+	<tr>
+      <td><input type="checkbox" /></td>
+      <td> First Steps in R</td>
+      <td></td>
+      <td><a href="https://uci.yuja.com/V/Video?v=1935951&node=7463920&a=1967175274&autoplay=1" target = "_blank">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week1/01-intro-r-rstudio.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+	  
+	<tr>
+      <td><input type="checkbox" /></td>
+      <td>First Steps in R Markdown</td>
+      <td></td>
+      <td><a href="https://uci.yuja.com/V/Video?v=1939057&node=7473690&a=1673477606&autoplay=1" target = "_blank">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week1/01-intro-rmarkdown.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+	  
+	<tr>
+      <td><input type="checkbox" /></td>
+      <td>GitHub Setup and Introduction</td>
+      <td></td>
+      <td><a href="https://uci.yuja.com/V/Video?v=1939081&node=7473791&a=1950359259&autoplay=1" target = "_blank">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week1/01-intro-github.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a> &nbsp; <a href="https://github.com/ics80-fa20"
+            target = "_blank"><i class="fab fa-github"
+            aria-hidden="true"
+            title="External link to GitHub"></i></a></td>
+      <td></td>
+    </tr>
+	  
+	  
+	  
+	<tr>
+      <td><input type="checkbox" /></td>
+      <td> Introduction to Data</td>
+      <td></td>
+      <td><a href="https://uci.yuja.com/V/Video?v=1939084&node=7473812&a=1585848864&autoplay=1" target = "_blank">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week1/01-intro-data.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+	
+<tr>
+      <td><input type="checkbox" /></td>
+      <td> Reading from IMS book</td>
+      <td>Section 1.2.1</td>
+      <td><a href="https://openintro-ims.netlify.app/getting-started-with-data.html#observations-variables-and-data-matrices" target = "_blank">
+            <i class="fas fa-book" aria-hidden="true"
+			   title="Link to reading"></i></a> </td>
+      <td></td>
+    </tr>
+	  
+	<tr>
+      <td><input type="checkbox" /></td>
+      <td>(some) Data Types</td>
+      <td></td>
+      <td><a href="https://uci.yuja.com/V/Video?v=1939099&node=7473884&a=421381136&autoplay=1" target = "_blank">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week1/01-data-types.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+      <td></td>
+    </tr>
+    
+	<tr>
+      <td><input type="checkbox" /></td>
+      <td>Data Quiz</td>
+      <td>In the repo for weekly materials. After you are done, do not forget to push it.</td>
+      <td><a href="https://github.com/ics80-fa20"
+            target = "_blank"><i class="fab fa-github"
+            aria-hidden="true"
+            title="External link to GitHub"></i></a></td>
+      <td>Oct 8, 11:59 pm</td>
+    </tr>
+	
+	 <td><input type="checkbox" /></td>
+      <td> What is the Question?</td>
+      <td>Optional Reading. Make sure to read the chart carefully.</td>
+      <td><a href="https://science.sciencemag.org/content/347/6228/1314.long" target = "_blank">
+            <i class="fas fa-book" aria-hidden="true"
+			   title="Link to reading"></i></a> </td>
+      <td></td>
+    
+    <tr>
+      <td><input type="checkbox" /></td>
+      <td>Homework 1</td>
+      <td>Will be posted on Oct 9.</td>
+      <td></td>
+      <td>Oct 16, 11:59 pm</td>
+    </tr>
+  </table>
+  
+  <!--
+Blank table overflow
+<tr>
+  <td><input type="checkbox" /></td>
+  <td> </td>
+  <td> </td>
+  <td></td>
+</tr>
+--> 
+  
+</div>
+<div class="load-html"  data-source="footer.html"></div>
+</body>
 </html>

@@ -1,0 +1,211 @@
+---
+title: "First Steps in R"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    lib_dir: libs
+    css: "slide-style.css"
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+---
+
+class: title-slide
+
+```{r child = "../setup.Rmd"}
+```
+
+<br>
+<br>
+.right-panel[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+---
+
+class: middle
+
+
+We will use RStudio on ICS Hub.
+
+--
+
+You can access Hub at [hub.ics.uci.edu](https://hub.ics.uci.edu).
+
+--
+
+You will need ICS username and password. If you do not have one you can follow the instructions on the [help page](https://www.ics.uci.edu/~lab/students/acct_activate.php). 
+
+---
+
+class: middle center
+
+
+#### Starting RStudio
+
+<video width="80%" height="45%%" align = "center" controls>
+  <source src="screencast/1-open-rstudio.mp4" type="video/mp4">
+</video>
+
+
+
+---
+
+class: middle center inverse
+
+.font150[hello woRld]
+
+
+
+---
+
+class: middle center
+
+<video width="80%" height="45%%" align = "center" controls>
+  <source src="screencast/1-hello-world.mp4" type="video/mp4">
+</video>
+
+
+
+---
+
+class: inverse middle center
+
+.font100[R review]
+
+---
+
+class: middle 
+
+## Object assignment operator
+
+```{r}
+birth_year <- 1950
+```
+
+
+--
+
+|                            | Windows        | Mac              |
+|----------------------------|----------------|------------------|
+| Shortcut     | Alt + -        | Option + -       |
+
+
+---
+
+class: 
+
+## R is case-sensitive
+
+
+```{r error=TRUE}
+
+my_age <- 2020 - birth_year
+
+My_age
+```
+
+--
+
+
+---
+
+
+class: middle
+
+If something comes in quotes, it is not defined in R. 
+
+
+```{r}
+
+ages <- c(25, my_age, 32)
+
+names <- c("Menglin", "Mine", "Rafael")
+
+data.frame(age = ages, name = names)
+```
+
+---
+
+
+## Vocabulary
+
+```{r eval=FALSE}
+do(something)
+```
+
+`do()` is a function;   
+`something` is the argument of the function.
+--
+
+```{r eval=FALSE}
+do(something, colorful)
+```
+
+`do()` is a function;   
+`something` is the first argument of the function;   
+`colorful` is the second argument of the function.
+
+---
+
+class: middle
+
+## Getting Help
+
+In order to get any help we can use `?` followed by function (or object) name. 
+
+```{r eval=FALSE}
+?c
+```
+
+
+---
+
+## tidyverse_style_guide
+
+>canyoureadthissentence?
+
+
+--
+    
+.pull-right[
+
+```{r eval = FALSE}
+age <- c(6, 9, 15)
+
+data.frame(age_kid = age)
+```
+
+]
+
+--
+
+.pull-left[
+
+After function names do not leave any spaces.
+
+Before and after operators (e.g. <-, =) leave spaces. 
+
+Put a space after a comma, **not** before. 
+
+Object names are all lower case, with words separated by an underscore.
+
+]
+
+
+
+---
+
+class: middle center
+
+
+#### RStudio Setup
+
+<video width="80%" height="45%%" align = "center" controls>
+  <source src="screencast/1-rstudio-setup.mp4" type="video/mp4">
+</video>

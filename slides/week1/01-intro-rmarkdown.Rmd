@@ -1,0 +1,154 @@
+---
+title: "First Steps in R Markdown"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: ["slide-style.css"]
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+---
+
+class: title-slide
+
+```{r echo = FALSE}
+library(fabricerin)
+```
+
+<br>
+<br>
+.right-panel[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+
+---
+
+class: inverse middle center
+
+.font150[R Markdown]
+
+---
+
+class: inverse middle center
+
+.font150[~~R~~ Markdown]
+
+---
+
+## markdown `r fontawesome::fa(name = "markdown", fill = "#4d2600")`
+
+<br>
+
+
+
+.pull-left[
+
+```
+_Hello world_ 
+
+__Hello world__
+
+~~Hello world~~ 
+```
+]
+
+.pull-right[
+
+_Hello world_ 
+
+__Hello world__
+
+~~Hello world~~ 
+]
+---
+
+class: subtopic center middle
+
+.sub-topic-note[R .strike[Markdown]]
+
+---
+
+class: inverse
+
+.font100[`r fontawesome::fa(name = "r-project", fill = "white")` = .R file]
+
+.font100[`r fontawesome::fa(name = "markdown", fill = "white")` = .md file]
+
+.font100[`r fontawesome::fa(name = "r-project", fill = "white")` + `r fontawesome::fa(name = "markdown", fill = "white")` = .Rmd file]
+
+---
+
+class: center middle
+
+#### R Markdown
+
+
+
+<video width="80%" height="45%%" align = "center" controls>
+  <source src="screencast/1-intro-rmarkdown.mp4" type="video/mp4">
+</video>
+
+---
+
+```{r echo=FALSE, out.width='100%'}
+knitr::include_graphics('img/rmd-parts.jpeg')
+```
+
+---
+class: center middle
+
+## Add Chunk
+
+```{r echo=FALSE, out.width='50%'}
+knitr::include_graphics('img/code-chunk.png')
+```
+
+---
+
+class: center middle
+
+## Run the Current Chunk
+
+```{r echo=FALSE, out.width='20%'}
+knitr::include_graphics('img/run-code.png')
+```
+
+---
+
+class: center middle 
+
+## Knit
+
+```{r echo=FALSE, out.width='50%'}
+knitr::include_graphics('img/knit.png')
+```
+
+---
+
+class: middle center
+
+
+## Shortcuts
+
+|                            | Windows          | Mac              |
+|----------------------------|------------------|------------------|
+| add chunk                  | Ctrl + Alt + I   | Cmd + Option + I |
+| run the current chunk      | Ctrl + Alt + C   | Cmd + Option + C |
+| run current line/selection | Ctrl + Enter     | Cmd + Return     |
+| knit                       | Ctrl + Shift + K | Cmd + Shift + K  |
+
+
+---
+
+class: middle
+
+## My Slides
+
+Slides that you are currently looking at are also written in R Markdown. You can take a look at them on [GitHub repo](https://github.com/ics80-fa20/ids-website/tree/master/slides) for the course website.
+
