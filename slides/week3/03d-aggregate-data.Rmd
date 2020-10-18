@@ -1,0 +1,300 @@
+---
+title: "Aggregating Data"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: ["slide-style.css"]
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+---
+
+class: title-slide
+
+```{r child = "../setup.Rmd"}
+```
+
+
+```{r echo = FALSE, message = FALSE}
+library(tidyverse)
+options(scipen = 999)
+```
+
+
+<br>
+<br>
+.right-panel[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+
+---
+
+class: middle
+
+```{r echo = FALSE, message = FALSE}
+lapd <- 
+  read_csv(here::here("slides/data/Police_Payroll.csv")) %>% 
+  janitor::clean_names() %>% 
+  filter(year == 2018) %>% 
+  select(job_class_title, 
+         employment_type, 
+         base_pay) %>% mutate(employment_type = as.factor(employment_type),
+           job_class_title = as.factor(job_class_title),
+           base_pay_level = case_when(
+             base_pay < 0 ~ "Less than 0", 
+             base_pay == 0 ~ "No Income",
+             base_pay < 62474 ~ "Less than Median, Greater than 0",
+             base_pay > 62474 ~ "Greater than Median")) 
+```
+
+
+.pull-left[
+## Data
+Observations
+]
+
+.pull-left[
+## Aggregate Data
+Summaries of observations
+]
+
+---
+class: inverse middle
+
+.font75[Aggregating Categorical Data]
+
+---
+
+class: middle
+
+Categorical data are summarized with **counts** or **proportions**
+
+---
+
+class: middle
+
+```{r}
+lapd %>% 
+  count(employment_type)
+```
+
+
+---
+
+```{r}
+lapd %>% 
+  count(employment_type) %>% 
+  mutate(prop = n/sum(n))
+```
+
+---
+
+class: inverse middle
+
+.font75[Aggregating Numerical Data]
+
+---
+
+class: middle
+
+## Review
+
+**mean** average
+
+**median** the middle value when the data are ordered
+
+**mode** value that appears the most often
+
+---
+
+class: middle
+
+## First and Third Quartiles
+
+25th percentile - first quartile (Q1)  
+50th percentile - median  
+75th percentile - third quartile (Q3)  
+
+---
+
+## Mean
+
+.pull-left[
+```{r}
+summarize(lapd, 
+          mean(base_pay))
+```
+]
+
+--
+
+.pull-right[
+
+```{r}
+mean(lapd$base_pay)
+```
+
+]
+
+
+---
+
+### Mean is not a good measure when the data are skewed
+
+```{r echo = FALSE, message = FALSE, fig.height=6}
+ggplot(lapd, aes(x = base_pay)) +
+  geom_histogram(binwidth = 10000)
+```
+
+--
+
+The data are skewed to the right (positively skewed).
+
+---
+
+
+## Median
+
+.pull-left[
+```{r}
+summarize(lapd, 
+          median(base_pay))
+```
+]
+
+--
+
+.pull-right[
+
+```{r}
+median(lapd$base_pay)
+```
+
+]
+
+
+
+---
+
+## Mode
+
+```{r}
+count(lapd, base_pay, sort = TRUE)
+```
+
+
+---
+
+## Standard Deviation
+
+.pull-left[
+```{r}
+summarize(lapd, 
+          sd(base_pay))
+```
+]
+
+--
+
+.pull-right[
+
+```{r}
+sd(lapd$base_pay)
+```
+
+]
+
+---
+
+## Variance
+
+.pull-left[
+```{r}
+summarize(lapd, 
+          var(base_pay))
+```
+]
+
+--
+
+.pull-right[
+
+```{r}
+var(lapd$base_pay)
+```
+
+]
+
+---
+
+```{r}
+summarize(lapd,
+          mean(base_pay),
+          median(base_pay),
+          sd(base_pay),
+          var(base_pay))
+```
+
+Note how the variables names in this table is not easy to read.
+
+---
+
+```{r}
+summarize(lapd,
+          mean_base_pay = mean(base_pay),
+          med_base_pay = median(base_pay),
+          sd_base_pay = sd(base_pay),
+          var_base_pay = var(base_pay))
+```
+
+---
+
+class: inverse middle
+
+.font75[Aggregating Data by Groups]
+
+---
+
+`group_by()`
+
+```{r echo = FALSE, out.width="80%", fig.align='center'}
+knitr::include_graphics("img/data-wrangle.003.jpeg")
+```
+
+---
+
+Q. What is the median salary for each employment type?
+
+
+
+---
+
+```{r}
+lapd %>% 
+  group_by(employment_type)
+```
+
+---
+
+```{r}
+lapd %>% 
+  group_by(employment_type) %>% 
+  summarize(med_base_pay = median(base_pay))
+```
+
+---
+
+We can also remind ourselves how many staff members there were in each group.
+
+```{r}
+lapd %>% 
+  group_by(employment_type) %>% 
+  summarize(med_base_pay = median(base_pay),
+            n = n())
+```
