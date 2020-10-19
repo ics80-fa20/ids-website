@@ -111,7 +111,7 @@ class: middle
 
 **median** the middle value when the data are ordered
 
-**mode** value that appears the most often
+**mode** value that appears the most often (local maxima for continous variables)
 ---
 
 ## Mean
@@ -193,7 +193,7 @@ median(lapd$base_pay)
 
 ---
 
-## Mode
+## Mode (?)
 
 
 ```r
@@ -212,7 +212,7 @@ count(lapd, base_pay, sort = TRUE)
 ## 6   95971.   127
 ## # … with 8,435 more rows
 ```
-
+.footnote[Mode is local maxima for continuous variables. This is not exactly the mode calculation for base_pay but we are learning sorting here.]
 ---
 
 ## Quantiles
