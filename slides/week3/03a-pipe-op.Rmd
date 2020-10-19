@@ -106,6 +106,7 @@ class: middle
 
 ```{r}
 numbers <- c(4, 8, 16)
+numbers
 ```
 
 --
@@ -114,6 +115,7 @@ numbers <- c(4, 8, 16)
 
 ```{r}
 avg_number <- mean(numbers)
+avg_number
 ```
 
 --

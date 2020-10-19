@@ -214,7 +214,6 @@ select(lapd, -row_id, -department_title)
 `ends_with()`  
 `contains()`  
 
-There are more
 ---
 
 
@@ -408,11 +407,11 @@ filter(lapd, year == 2018)
 
 class: middle
 
-Q. According to [datausa.io](https://datausa.io/profile/geo/los-angeles-ca#:~:text=In%202018%2C%20Los%20Angeles%2C%20CA,%2462%2C474%2C%20a%203.78%25%20increase.) Los Angeles had a median household income of $62474. How many LAPD staff members earned more than $62474 in year 2018 according to this data?
+Q. According to [datausa.io](https://datausa.io/profile/geo/los-angeles-ca#:~:text=In%202018%2C%20Los%20Angeles%2C%20CA,%2462%2C474%2C%20a%203.78%25%20increase.) Los Angeles had a median household income of $62474 in 2018. How many LAPD staff members had a base pay higher than $62474 in year 2018 according to this data?
 
 .footnote[Median household income is **not** the same thing as median employee income. Our aim is data wrangling and not necessarily statistical analysis for now.]
 
---
+---
 
 
 ```r
@@ -447,11 +446,6 @@ lapd %&gt;%
 
 ---
 
-class: middle
-
-Q. According to [datausa.io](https://datausa.io/profile/geo/los-angeles-ca#:~:text=In%202018%2C%20Los%20Angeles%2C%20CA,%2462%2C474%2C%20a%203.78%25%20increase.) Los Angeles had a median household income of $62474. How many LAPD staff members earned more than $62474 in year 2018 according to this data?
-
-
 
 
 ```r
@@ -466,7 +460,7 @@ lapd %&gt;%
 
 ---
 
-Q. How many observations are available between 2013 and 2015 including 2013 and 2015.
+Q. How many observations are available between 2013 and 2015 including 2013 and 2015?
 
 --
 
@@ -502,7 +496,7 @@ lapd %&gt;%
 
 ---
 
-Q. How many observations are available between 2013 and 2015 including 2013 and 2015.
+Q. How many observations are available between 2013 and 2015 including 2013 and 2015?
 
 
 
@@ -519,7 +513,7 @@ lapd %&gt;%
 
 ---
 
-Q. How many LAPD staff were employed full time in 2018.
+Q. How many LAPD staff were employed full time in 2018?
 
 
 

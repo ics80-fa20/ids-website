@@ -115,7 +115,7 @@ lapd %&gt;%
   mutate(base_pay_level = case_when(
     base_pay &lt; 0 ~ "Less than 0", 
     base_pay == 0 ~ "No Income",
-    base_pay &lt; 62474 ~ "Less than Median, Greater than 0",
+    base_pay &lt; 62474 &amp; base_pay &gt; 0 ~ "Less than Median, Greater than 0",
     base_pay &gt; 62474 ~ "Greater than Median")) 
 ```
 
@@ -142,7 +142,7 @@ lapd %&gt;%
   mutate(base_pay_level = case_when(
     base_pay &lt; 0 ~ "Less than 0", 
     base_pay == 0 ~ "No Income",
-    base_pay &lt; 62474 ~ "Less than Median, Greater than 0",
+    base_pay &lt; 62474 &amp; base_pay &gt; 0 ~ "Less than Median, Greater than 0",
     base_pay &gt; 62474 ~ "Greater than Median")) %&gt;% 
   select(base_pay_level)
 ```
@@ -172,7 +172,7 @@ lapd %&gt;%
   mutate(base_pay_level = case_when(
     base_pay &lt; 0 ~ "Less than 0", 
     base_pay == 0 ~ "No Income",
-    base_pay &lt; 62474 ~ "Less than Median, Greater than 0",
+    base_pay &lt; 62474 &amp; base_pay &gt; 0 ~ "Less than Median, Greater than 0",
     base_pay &gt; 62474 ~ "Greater than Median")) %&gt;% 
   select(base_pay_level) %&gt;% 
   ggplot(aes(x = base_pay_level)) +
@@ -252,7 +252,7 @@ lapd &lt;-
            base_pay_level = case_when(
              base_pay &lt; 0 ~ "Less than 0", 
              base_pay == 0 ~ "No Income",
-             base_pay &lt; 62474 ~ "Less than Median, Greater than 0",
+             base_pay &lt; 62474 &amp; base_pay &gt; 0 ~ "Less than Median, Greater than 0",
              base_pay &gt; 62474 ~ "Greater than Median")) 
 ```
     </textarea>

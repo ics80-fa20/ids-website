@@ -86,7 +86,7 @@ lapd %>%
   mutate(base_pay_level = case_when(
     base_pay < 0 ~ "Less than 0", 
     base_pay == 0 ~ "No Income",
-    base_pay < 62474 ~ "Less than Median, Greater than 0",
+    base_pay < 62474 & base_pay > 0 ~ "Less than Median, Greater than 0",
     base_pay > 62474 ~ "Greater than Median")) 
 ```
 
@@ -99,7 +99,7 @@ lapd %>%
   mutate(base_pay_level = case_when(
     base_pay < 0 ~ "Less than 0", 
     base_pay == 0 ~ "No Income",
-    base_pay < 62474 ~ "Less than Median, Greater than 0",
+    base_pay < 62474 & base_pay > 0 ~ "Less than Median, Greater than 0",
     base_pay > 62474 ~ "Greater than Median")) %>% 
   select(base_pay_level)
 ```
@@ -115,7 +115,7 @@ lapd %>%
   mutate(base_pay_level = case_when(
     base_pay < 0 ~ "Less than 0", 
     base_pay == 0 ~ "No Income",
-    base_pay < 62474 ~ "Less than Median, Greater than 0",
+    base_pay < 62474 & base_pay > 0 ~ "Less than Median, Greater than 0",
     base_pay > 62474 ~ "Greater than Median")) %>% 
   select(base_pay_level) %>% 
   ggplot(aes(x = base_pay_level)) +
@@ -129,7 +129,7 @@ lapd %>%
   mutate(base_pay_level = case_when(
     base_pay < 0 ~ "Less than 0", 
     base_pay == 0 ~ "No Income",
-    base_pay < 62474 ~ "Less than Median, Greater than 0",
+    base_pay < 62474 & base_pay > 0 ~ "Less than Median, Greater than 0",
     base_pay > 62474 ~ "Greater than Median")) %>% 
   select(base_pay_level) %>% 
   ggplot(aes(x = base_pay_level)) +
@@ -181,7 +181,7 @@ lapd <-
            base_pay_level = case_when(
              base_pay < 0 ~ "Less than 0", 
              base_pay == 0 ~ "No Income",
-             base_pay < 62474 ~ "Less than Median, Greater than 0",
+             base_pay < 62474 & base_pay > 0 ~ "Less than Median, Greater than 0",
              base_pay > 62474 ~ "Greater than Median")) 
 ```
 

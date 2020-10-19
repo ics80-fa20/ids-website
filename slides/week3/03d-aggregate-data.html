@@ -112,17 +112,6 @@ class: middle
 **median** the middle value when the data are ordered
 
 **mode** value that appears the most often
-
----
-
-class: middle
-
-## First and Third Quartiles
-
-25th percentile - first quartile (Q1)  
-50th percentile - median  
-75th percentile - third quartile (Q3)  
-
 ---
 
 ## Mean
@@ -164,9 +153,6 @@ mean(lapd$base_pay)
 
 &lt;img src="03d-aggregate-data_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 
---
-
-The data are skewed to the right (positively skewed).
 
 ---
 
@@ -227,91 +213,43 @@ count(lapd, base_pay, sort = TRUE)
 ## # … with 8,435 more rows
 ```
 
-
 ---
 
-## Standard Deviation
-
-.pull-left[
-
-```r
-summarize(lapd, 
-          sd(base_pay))
-```
-
-```
-## # A tibble: 1 x 1
-##   `sd(base_pay)`
-##            &lt;dbl&gt;
-## 1         38423.
-```
-]
-
---
-
-.pull-right[
+## Quantiles
 
 
 ```r
-sd(lapd$base_pay)
+summarize(lapd, quantile(base_pay, c(0.25, 0.50, 0.75)))
 ```
 
 ```
-## [1] 38422.51
+## # A tibble: 3 x 1
+##   `quantile(base_pay, c(0.25, 0.5, 0.75))`
+##                                      &lt;dbl&gt;
+## 1                                   67266.
+## 2                                   97601.
+## 3                                  109368.
 ```
 
-]
+
+
+
+We would expect 25% of the data to be less than 67265.5475
+
 
 ---
-
-## Variance
-
-.pull-left[
-
-```r
-summarize(lapd, 
-          var(base_pay))
-```
-
-```
-## # A tibble: 1 x 1
-##   `var(base_pay)`
-##             &lt;dbl&gt;
-## 1     1476289402.
-```
-]
-
---
-
-.pull-right[
-
-
-```r
-var(lapd$base_pay)
-```
-
-```
-## [1] 1476289402
-```
-
-]
-
----
-
 
 ```r
 summarize(lapd,
           mean(base_pay),
-          median(base_pay),
-          sd(base_pay),
-          var(base_pay))
+          median(base_pay))
 ```
 
 ```
-## # A tibble: 1 x 4
-##   `mean(base_pay)` `median(base_pay)` `sd(base_pay)` `var(base_pay)`
-##              &lt;dbl&gt;              &lt;dbl&gt;          &lt;dbl&gt;           &lt;dbl&gt;
-## 1           85149.             97601.         38423.     1476289402.
+## # A tibble: 1 x 2
+##   `mean(base_pay)` `median(base_pay)`
+##              &lt;dbl&gt;              &lt;dbl&gt;
+## 1           85149.             97601.
 ```
 
 Note how the variables names in this table is not easy to read.
@@ -322,16 +260,14 @@ Note how the variables names in this table is not easy to read.
 ```r
 summarize(lapd,
           mean_base_pay = mean(base_pay),
-          med_base_pay = median(base_pay),
-          sd_base_pay = sd(base_pay),
-          var_base_pay = var(base_pay))
+          med_base_pay = median(base_pay))
 ```
 
 ```
-## # A tibble: 1 x 4
-##   mean_base_pay med_base_pay sd_base_pay var_base_pay
-##           &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;
-## 1        85149.       97601.      38423.  1476289402.
+## # A tibble: 1 x 2
+##   mean_base_pay med_base_pay
+##           &lt;dbl&gt;        &lt;dbl&gt;
+## 1        85149.       97601.
 ```
 
 ---

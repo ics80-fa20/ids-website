@@ -110,17 +110,6 @@ class: middle
 **median** the middle value when the data are ordered
 
 **mode** value that appears the most often
-
----
-
-class: middle
-
-## First and Third Quartiles
-
-25th percentile - first quartile (Q1)  
-50th percentile - median  
-75th percentile - third quartile (Q3)  
-
 ---
 
 ## Mean
@@ -152,9 +141,6 @@ ggplot(lapd, aes(x = base_pay)) +
   geom_histogram(binwidth = 10000)
 ```
 
---
-
-The data are skewed to the right (positively skewed).
 
 ---
 
@@ -188,57 +174,28 @@ median(lapd$base_pay)
 count(lapd, base_pay, sort = TRUE)
 ```
 
-
 ---
 
-## Standard Deviation
-
-.pull-left[
-```{r}
-summarize(lapd, 
-          sd(base_pay))
-```
-]
-
---
-
-.pull-right[
+## Quantiles
 
 ```{r}
-sd(lapd$base_pay)
+summarize(lapd, quantile(base_pay, c(0.25, 0.50, 0.75)))
 ```
 
-]
+```{r echo = FALSE}
+q1 <- summarize(lapd, quantile(base_pay, c(0.25))) %>% 
+  pull()
+```
+
+
+We would expect 25% of the data to be less than `r q1`
+
 
 ---
-
-## Variance
-
-.pull-left[
-```{r}
-summarize(lapd, 
-          var(base_pay))
-```
-]
-
---
-
-.pull-right[
-
-```{r}
-var(lapd$base_pay)
-```
-
-]
-
----
-
 ```{r}
 summarize(lapd,
           mean(base_pay),
-          median(base_pay),
-          sd(base_pay),
-          var(base_pay))
+          median(base_pay))
 ```
 
 Note how the variables names in this table is not easy to read.
@@ -248,9 +205,7 @@ Note how the variables names in this table is not easy to read.
 ```{r}
 summarize(lapd,
           mean_base_pay = mean(base_pay),
-          med_base_pay = median(base_pay),
-          sd_base_pay = sd(base_pay),
-          var_base_pay = var(base_pay))
+          med_base_pay = median(base_pay))
 ```
 
 ---
