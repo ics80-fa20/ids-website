@@ -49,7 +49,7 @@ lapd <-
            base_pay_level = case_when(
              base_pay < 0 ~ "Less than 0", 
              base_pay == 0 ~ "No Income",
-             base_pay < 62474 ~ "Less than Median, Greater than 0",
+             base_pay < 62474 & base_pay > 0 ~ "Less than Median, Greater than 0",
              base_pay > 62474 ~ "Greater than Median")) 
 ```
 

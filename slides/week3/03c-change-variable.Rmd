@@ -68,7 +68,7 @@ glimpse(lapd)
 
 **Goal**: 
 
-Create a new variable called `base_pay_level` which has `Less Than 0`, `No Income`, `Less than Median, Greater than 0` and `Greater than Median`. We will consider $62474 as the median (from previous lecture).
+Create a new variable called `base_pay_level` which has `Less Than 0`, `No Income`, `Less than Median and Greater than 0` and `Greater than Median`. We will consider $62474 as the median (from previous lecture).
 
 ---
 
