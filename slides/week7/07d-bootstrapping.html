@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Bootstrapping</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Mine Dogucu" />
+    <link rel="stylesheet" href="slide-style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+
+
+&lt;br&gt;
+&lt;br&gt;
+.pull-right[ 
+
+# Bootstrapping
+## Dr. Mine Dogucu
+]
+
+---
+
+## Data
+
+
+
+
+
+```r
+lapd &lt;- lapd %&gt;% 
+  janitor::clean_names() %&gt;% 
+  filter(year == 2018) %&gt;% 
+  select(base_pay)
+```
+
+--
+We will be using payroll data from Los Angeles Police Department (LAPD) from 2018.
+
+
+
+```r
+glimpse(lapd)   
+```
+
+```
+## Rows: 14,824
+## Columns: 1
+## $ base_pay &lt;dbl&gt; 119321.60, 113270.70, 148116.00, 78676.87, 109373.63…
+```
+
+---
+
+## Population Distribution
+
+
+&lt;img src="07d-bootstrapping_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## True Median
+
+
+```r
+median(lapd$base_pay)
+```
+
+```
+## [1] 97600.66
+```
+This is a **population parameter**. We often do not know population parameters but we can **estimate** them. Estimation requires some sample data.
+
+---
+
+### Sample 1
+
+
+
+```
+##  [1]      0.00 101248.80 109378.40 132957.60  90956.57 132743.97
+##  [7] 104091.10 104100.80  48696.00 125958.40
+```
+
+Median of sample 1 is 104095.95.
+
+--
+
+### Sample 2
+
+
+
+```
+##  [1] 95971.20 96193.81     0.00 34479.44 90005.56 66881.94 75342.80
+##  [8] 68034.18 54612.80     0.00
+```
+
+Median of sample 2 is 67458.06.
+
+---
+
+### Sample 3
+
+
+
+```
+##  [1] 143967.89 109386.56 119321.60 106724.41  65343.46  90583.56
+##  [7]  96848.28 103892.80  67380.10  85136.00
+```
+
+Median of sample 3 is 100370.54.
+
+--
+
+### Sample 4
+
+
+
+```
+##  [1]      0.00 101248.80 109378.40 132957.60  90956.57 132743.97
+##  [7] 104091.10 104100.80  48696.00 125958.40
+```
+
+Median of sample 4 is 104095.95.
+
+
+---
+
+## Sampling Variability
+
+- Note that the median varies from sample to sample. Each sample's median is not necessarily the population median we are trying to estimate. There is variance of sample medians. 
+
+--
+
+- In real life taking samples from the population is costly. We often have only have one sample that we can use to estimate the population parameter.
+
+--
+
+- How can we take sampling variability into account when we only have one sample?
+
+    - There are many was to do this. We will use **bootstrapping** in this class.
+    - If you want to learn more on estimating population parameters using sample data, I encourage you to take statistics classes. 
+
+---
+
+class: inverse middle
+
+.pull-left[
+
+&lt;br&gt;
+
+.font75[Bootstrapping]
+
+]
+
+.pull-right[
+&lt;img src="img/bootstrap.jpg" width="40%" style="display: block; margin: auto;" /&gt;
+]
+---
+
+
+
+&lt;img src="img/bootstrap_step0.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="img/bootstrap_step1.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="img/bootstrap_step2.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+&lt;img src="img/bootstrap_step3.png" width="100%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Random Sample ( `\(n\)` = 50)
+
+
+
+
+```r
+library(infer) # for bootstrap related functions
+set.seed(12345)
+lapd_sample &lt;- sample_n(lapd, 20)
+
+lapd_sample$base_pay
+```
+
+```
+##  [1]      0.00 101248.80 109378.40 132957.60  90956.57 132743.97
+##  [7] 104091.10 104100.80  48696.00 125958.40  95971.20  96193.81
+## [13]      0.00  34479.44  90005.56  66881.94  75342.80  68034.18
+## [19]  54612.80      0.00
+```
+
+
+---
+
+## Bootstrapping
+
+
+
+```r
+boot &lt;- lapd_sample %&gt;% 
+  specify(response = base_pay) %&gt;% 
+  generate(reps = 1000, type = "bootstrap") %&gt;% 
+  calculate(stat = "median")
+```
+
+---
+
+class: center middle
+
+&lt;video width="80%" height="45%%" align = "center" controls&gt;
+  &lt;source src="screencast/7-infer-bootstrap.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+---
+
+
+```r
+visualize(boot) +
+  scale_x_continuous(labels = scales::comma_format()) +
+  theme_bw() +
+  theme(text = element_text(size = 20)) 
+```
+
+&lt;img src="07d-bootstrapping_files/figure-html/unnamed-chunk-18-1.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## 95% Confidence Interval
+
+We can construct the 95% confidence interval by calculating the 2.5th and 97.5th percentiles of the bootstrap distribution.
+
+
+```r
+boot %&gt;% 
+  summarize(lower_bound = quantile(stat, 0.025),
+            upper_bound = quantile(stat, 0.975))
+```
+
+```
+## # A tibble: 1 x 2
+##   lower_bound upper_bound
+##         &lt;dbl&gt;       &lt;dbl&gt;
+## 1      60747.     104091.
+```
+
+This confidence interval captures the true median (97600.66).
+
+---
+
+
+
+Commonly used confidence levels in practice are 90% (blue), 95% (red), and 99 (black)%
+
+
+
+
+
+&lt;img src="07d-bootstrapping_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## 
+
+.font50[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:black;" viewBox="0 0 576 512"&gt;&lt;path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/&gt;&lt;/svg&gt;] Calculating a confidence interval does not guarantee that we will capture the true value of population parameter in the interval. 
+
+--
+
+If we were to take considerable large number of samples (we only had one sample) and construct 95% confidence intervals for each of the samples we would expect about 95% of the confidence intervals to capture the the true value of population parameter in the interval.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "pygments",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

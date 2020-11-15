@@ -1,0 +1,313 @@
+---
+title: "Variance"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: slide-style.css
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+    anchor_sections: FALSE
+---
+
+class: title-slide
+
+```{r echo = FALSE}
+library(ggplot2)
+library(gridExtra)
+```
+
+<br>
+<br>
+.pull-right[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+---
+
+class: inverse middle
+
+.font75[If there was no variance there would be no statistics.]
+
+
+---
+
+## What if?
+
+- We want to understand average number of sleep Irvine residents get.  What if everyone in Irvine slept 8 hours every night? (`sleep` = {8, 8,..., 8})
+
+--
+
+- We want to predict who will graduate college. What if everyone graduated college? (`graduate` = {TRUE, TRUE,..., TRUE})
+
+--
+
+- We want to understand if Android users spend more time on their phones when compared to iOS users. What if everyone spent 3 hours per day on their phones?
+
+--
+
+- We want to understand, if birth height and weight are positively associated in babies. What if every baby was 7.5 lbs? (`weight` = {7.5, 7.5,..., 7.5})
+
+--
+
+In all this scenarios there would be no **variance**. The variables mentioned would all be constants thus would not even be a **vari**able.
+
+---
+
+class: middle
+
+.font50[Things vary. We use statistics to understand **how** things vary and often we want to know **why** they vary.] 
+
+---
+
+Consider Dr. Dogucu teaching three classes. All of these classes have 5 students. Below are midterm results from these classes. Which of the classes have a higher variance?
+
+Class 1: 80 80 80 80 80  
+Class 2: 76 78 80 82 84  
+Class 3: 60 70 80 90 100  
+
+--
+
+All of these classes have a mean of 80 points. But the data differ! In order to explain how these are different we examine how far off each observed value is from the mean on "average". In class 1 all students are at the mean value so there is no variance. Class 2 students deviate from the mean slightly on "average". Class 3 has the highest deviation from the mean on "average". 
+
+
+---
+
+class: inverse middle
+
+.font75[Calculating the Variance]
+
+---
+
+## The Mean
+
+Consider the following data which represents the number of hours slept for 10 people who were surveyed.
+
+$x_i = \{7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8\}$
+```{r}
+x_i <- c(7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8)
+```
+
+
+--
+
+```{r}
+mean(x_i)
+```
+
+$\bar x = 7.72 \text{hr}$
+
+---
+
+## Sample Size
+
+```{r}
+length(sleep)
+```
+
+$n = 10$
+
+---
+
+
+.pull-left[## Standard Deviation
+
+```{r}
+sd(x_i)
+```
+
+$s = 1.218195 \text{ hr}$
+
+]
+
+.pull-right[## Variance
+
+```{r}
+var(x_i)
+```
+
+$s^2 = 1.484 \text{ hr}^2$
+
+]
+
+---
+
+<br>
+<br>
+
+$n = 10$, $\bar x = 7.72 \text{hr}$, $s = 1.218195 \text{hr}$
+
+Among 10 people the average number of sleep was 7.72 hours. However, everybody did not sleep 7.72 hours. There was deviation from the mean. The standard deviation from the mean was 1.218195 hours. The variance is the squared standard deviation which was $1.484 \text{ hr}^2$. 
+
+---
+
+class: inverse middle
+
+.font50[How did R calculate the variance?]
+---
+#### Standard deviation and Variance
+
+
+<table align = "center">
+<thead>
+
+<th>x<sub>i</sub> </th> <th>  x<sub>i</sub> - x&#772 </th> <th> (x<sub>i</sub> - x&#772) <sup>2</sup></th>
+</thead>
+
+<tr> 
+<td>5.5 </td> <td> 5.5-7.72 = -2.22 hr</td> <td> (-2.2 hr)<sup>2</sup> = 4.9284 hr <sup>2</sup> </td>
+</tr>
+
+<tr> 
+<td>7 </td> <td> 7-7.72 = -0.72 hr</td> <td> (-0.72 hr)<sup>2</sup> = 0.5184 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>7 </td> <td> 7-7.72 = -0.72 hr</td> <td> (-0.72 hr)<sup>2</sup> = 0.5184 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>7.2 </td> <td> 7.2-7.72 = -0.52 hr</td> <td> (-0.52 hr)<sup>2</sup> = 0.2704 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>7.5 </td> <td> 7.5-7.72 = -0.22 hr</td> <td> (-0.22 hr)<sup>2</sup> = 0.0484 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>8 </td> <td> 8-7.72 = 0.28 hr</td> <td> (0.28 hr)<sup>2</sup> = 0.0784 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>8 </td>  <td> 8-7.72 = 0.28 hr</td> <td> (0.28 hr)<sup>2</sup> = 0.0784 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>8 </td> <td> 8-7.72 = 0.28 hr</td> <td> (0.28 hr)<sup>2</sup> = 0.0784 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>9 </td> <td> 9-7.72 = 1.28 hr</td> <td> (1.28 hr)<sup>2</sup> = 1.6384 hr <sup>2</sup></td>
+</tr>
+
+<tr> 
+<td>10 </td> <td> 10-7.72 = 2.28 hr</td> <td> (2.28 hr)<sup>2</sup> = 5.1984 hr <sup>2</sup></td>
+</tr>
+
+</table>
+
+---
+
+## Total distance from the mean
+
+
+$\Sigma_{i = 1}^{n} (x_i - \bar x )^2 =$
+
+$4.9284 + 0.5184 + 0.5184 + 0.2704 + 0.0484 +$ 
+$0.0784 + 0.0784 + 0.0784+ 1.6384 + 5.1984 = 13.356 \text{ hr}^2$
+
+---
+
+
+## Sample variance
+
+<br>    
+.formula[
+
+$$s^2 = \frac{\Sigma_{i = 1}^{n} (x_i - \bar x )^2}{n-1}$$ 
+
+]
+
+<br>
+
+$$s^2= \frac{13.356}{10-1} = 1.484\text{ hr}^2$$
+
+---
+
+## Notation
+
+<table align ="center">
+
+<thead>
+<th> </th>
+<th>Sample Statistic</th>
+<th>Population Parameter</th>
+</thead>
+
+<tr>
+<td>Mean</td>
+<td> x&#772; </td>
+<td> &mu;</td>
+
+</tr>
+
+<tr>
+<td> Standard Deviation </td>
+<td> s </td>
+<td> &sigma;</td>
+
+</tr>
+
+<tr>
+<td> Variance </td>
+<td> s<sup>2</sup> </td>
+<td> &sigma;<sup>2</sup></td>
+
+</tr>
+
+</table>
+
+Sample size is denoted by $n$.
+
+---
+
+```{r echo = FALSE, fig.align='center'}
+
+p1 <- 
+  ggplot(data = data.frame(x = c(0, 200)), 
+         aes(x)) +
+  stat_function(fun = dnorm, n = 1001, args = list(mean = 100, sd = 15)) + 
+  ylab("") +
+    labs(title = expression(paste(mu, "= 100,", " ", sigma, "= 15")))+
+  theme_bw() +
+  theme(axis.text.y = element_blank(),
+        text = element_text(size = 20)) 
+
+p2 <- 
+  ggplot(data = data.frame(x = c(0, 200)), 
+         aes(x)) +
+  stat_function(fun = dnorm, n = 1001, args = list(mean = 100, sd = 30)) + 
+  ylab("") +
+    labs(title = expression(paste(mu, "= 100,", " ", sigma, "= 30")))+
+  theme_bw() +
+  theme(axis.text.y = element_blank(),
+        text = element_text(size = 20)) 
+
+p3 <- 
+  ggplot(data = data.frame(x = c(0, 200)), 
+         aes(x)) +
+  stat_function(fun = dnorm, n = 1001, args = list(mean = 90, sd = 15)) + 
+  ylab("") +
+  labs(title = expression(paste(mu, "= 90,", " ", sigma, "= 15")))+
+  theme_bw() +
+  theme(axis.text.y = element_blank(),
+        text = element_text(size = 20)) 
+
+
+p4 <- 
+  ggplot(data = data.frame(x = c(0, 200)), 
+         aes(x)) +
+  stat_function(fun = dnorm, n = 1001, args = list(mean = 90, sd = 30)) + 
+  ylab("") +
+  labs(title = expression(paste(mu, "= 90,", " ", sigma, "= 30"))) +
+  theme_bw() +
+  theme(axis.text.y = element_blank(),
+        text = element_text(size = 20)) 
+
+grid.arrange(p1, p2, p3, p4, ncol = 2, nrow = 2)
+```

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Study Designs</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Mine Dogucu" />
+    <link rel="stylesheet" href="slide-style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+&lt;br&gt;
+&lt;br&gt;
+.pull-right[ 
+
+# Study Designs
+## Dr. Mine Dogucu
+]
+
+---
+
+
+## Anecdotal Evidence
+
+You know two left-handed artists, you conclude being left-handed makes someone be better in art.
+
+We tend to remember unusual cases.
+
+We need rigorously designed studies to make generalizations and to establish causal relationships.
+
+---
+
+class: center middle
+
+Do UCI students who exercise regularly have higher GPA?
+
+
+---
+
+
+
+## Observational Study
+
+- There is no treatment/intervention.
+- Causal relationships should not be made.
+
+Even if we observe that UCI students who exercise regularly have higher GPA, we cannot conclude that exercising regularly increases GPA.
+
+---
+
+## Relationship between two variables
+
+If two variables are related to each other in some way we would call them __associated__.
+
+If two variables are not related to each other in any way we would call them __independent__.
+
+---
+
+## Relationship between two variables
+
+When we examine the relationship between two variables, we often want to know if the relationship between them is causal. In other words, does one variable cause the other? For instance, is exercising the reason for higher GPA? We don't know!
+
+When we suspect that two variables have a causal relationship we can say
+
+The __explanatory variable__ (e.g. exercising) might causally affect the __response variable__ (e.g. GPA).
+
+--
+
+Relationship between two variables does not imply one causes the other. 
+
+
+---
+
+## Relationship between two variables
+
+Explanatory variables are denoted by `\(x\)` and the response variable is denoted by `\(y\)`. You can remember this from e**X**planatory variable is `\(x\)`. Exercising may e**X**plain high GPA. 
+
+---
+
+&lt;img src="img/confounding.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+--
+
+A __confounding variable__ (e.g. time management skills) has a correlation with the the explanatory and the response variable.
+
+---
+
+class: center middle
+
+
+~~Do UCI students who exercise regularly have higher GPA?~~
+
+Does exercising regularly increase GPA for UCI students?
+
+
+---
+
+## Practice
+
+What is the explanatory variable?  
+What is the response variable?
+
+---
+## Experiment Design
+
+&lt;img src="img/experiment.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Image Copyright Derenik Haghverdian. Used with permission.]
+
+
+---
+
+class: center middle
+
+In __experiments__, researchers assign cases to treatments/interventions.
+
+---
+
+class: center middle
+
+In __randomized experiments__, researchers randomly assign cases  to treatments/interventions. In order to establish causal link between variables, we need randomized experiments. 
+
+---
+
+## Blocking
+
+A doctor has developed a drug called drug `i.d.s.` to treat some disease. She wants to know if patients who take drug `i.d.s.` is free of the disease for at least a year.
+
+--
+
+Plot twist: The doctor suspects that the drug may affect adults and kids differently.
+
+--
+
+If researchers suspect that the an additional variable that may influence the response variable then they may use __blocks__.
+
+---
+
+## Blocking
+
+
+&lt;img src="img/blocking.png" width="80%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Image Copyright Federica Ricci. Used with permission.]
+
+
+---
+
+### A/B testing 
+
+- A/B testing is a randomized experiment that compares two versions (A and B) of a single variable. 
+
+- It is commonly used on measuring online activities such as revenue per user, click through rates for online ads, number of returning users.
+
+--
+
+&lt;img src="img/ab_testing.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+class: inverse middle
+
+.font75[More vocabulary about experiments]
+
+
+
+---
+
+class: center middle
+
+A __placebo__ is a fake treatment. If a patient shows an improvement by taking a placebo then this is called a __placebo effect__.
+
+---
+
+class: center middle
+
+In __blind__ studies, patients do not know what treatment they receive. In __double blind__ studies patients who receive and the doctors who provide the treatment do not know the type of the treatment. 
+
+---
+
+class: center middle
+
+[Institutional Review Board](https://research.uci.edu/compliance/human-research-protections/index.html)
+
+---
+
+## Random Sampling vs. Random Assignment
+
+- Random sampling is used to select the sample from the population randomly. Random sampling allows for findings to be generalized to the population.
+
+- Random assignment is used to put participants to treatment/intervention groups randomly in experiments. Random assignment allows us to make causal relationships.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "pygments",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
