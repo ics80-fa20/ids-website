@@ -1,72 +1,191 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>ICS 80</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+<meta charset="utf-8">
+<title>ICS 80</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../style.css">
+<script src="https://kit.fontawesome.com/4145f6a1ca.js"></script> 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<!-- function for adding html within html--> 
 
-    <link rel="stylesheet" href="../style.css">
-
-    <script src="https://kit.fontawesome.com/4145f6a1ca.js"></script>
-
-	<link rel="shortcut icon" href="img/favicon.ico" />
-
-
-
-    <!-- function for adding html within html-->
-
-        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-        <script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script> 
+<script>
         $(function () {
             $(".load-html").each(function () {
                 $(this).load(this.dataset.source);
             });
         });
         </script>
+</head>
+<body>
+<div class="load-html"  data-source="navbar.html"></div>
+<div class = "main-text">
+  <h1>Week 7 - Making Decisions under Uncertainity</h1>
 
-  </head>
-  <body>
+  
+  If you have any questions about Week 7 materials please post
+  them on Piazza.
+  
+  If you click on icons such as <i class="fas fa-video" aria-hidden="true"
+      title="Link to lecture video"></i> it would direct you to the appropriate link
+  where the course material lies. <br>
+  <br>
+  <table class="table-striped text-left table-bordered" align = "center">
+    <thead>
+    <th style="width:  3%"></th>
+      <th style="width:  30%"></th>
+      <th style="width:  40%">Notes</th>
+      <th style="width:  8%">Links</th>
+      <th style="width:  15%">Due</th>
+      </thead>
+	  
+	  <tr>
+		  <td><input type="checkbox" /></td>
+		  <td>Welcome to Week 7</td>
+		  <td></td>
+		  <td><a href="https://uci.yuja.com/V/Video?v=2204783&node=8113334&a=165488510&autoplay=1" target = "_blank">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a></td>
+		  <td></td>
+	  
+	  </tr>
+	  
+	  <tr>
+		  <td><input type="checkbox" /></td>
+		  <td>Samples and Populations</td>
+		  <td></td>
+		  <td><a href="https://uci.yuja.com/V/Video?v=2204787&node=8113338&a=2040397811&autoplay=1">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week7/07a-sample-population.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+		  <td></td>
+	  
+	  </tr>
+	  
+	  	 <tr>
+		  <td><input type="checkbox" /></td>
+		  <td>Study Design</td>
+		  <td></td>
+		  <td><a href="https://uci.yuja.com/V/Video?v=2204789&node=8113346&a=1710445542&autoplay=1">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week7/07b-study-design.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+		  <td></td>
+	  
+	  </tr>
+	  
+	 <tr>
+      <td><input type="checkbox" /></td>
+      <td>Understanding Studies Quiz</td>
+      <td>
+      <td><a href="https://www.gradescope.com/courses/191961/assignments/846599" target ="_blank"> <i class="fas fa-edit" aria-hidden="true"
+            title="External Link to Gradescope" target = "_blank"></i></a></td>
+      <td>Nov 19, 11:59 pm</td>
+    </tr>
+	  
+	  	 <tr>
+		  <td><input type="checkbox" /></td>
+		  <td>Variance</td>
+		  <td></td>
+		  <td><a href="https://uci.yuja.com/V/Video?v=2204793&node=8113352&a=866824930&autoplay=1">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week7/07c-variance.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+		  <td></td>
+	  
+	  </tr>
+	  
 
+	  
+	    <tr>
+      <td><input type="checkbox" /></td>
+      <td> Reading from IMS book</td>
+      <td>Sections 2.1.4</td>
+      <td><a href="https://openintro-ims.netlify.app/summarizing-visualizing-data.html#variance-sd" target = "_blank">
+            <i class="fas fa-book" aria-hidden="true"
+			   title="Link to reading"></i></a> </td>
+      <td></td>
+    </tr>
+	  
+	  
+	  
+	  <tr>
+		  <td><input type="checkbox" /></td>
+		  <td>Bootstrapping</td>
+		  <td></td>
+		  <td><a href="https://uci.yuja.com/V/Video?v=2204801&node=8113368&a=1308500553&autoplay=1">
+            <i class="fas fa-video" aria-hidden="true"
+			   title="Link to lecture video"></i></a> &nbsp; 
+		  <a href="../slides/week7/07d-bootstrapping.html"
+            target = "_blank"><i class="fas fa-chalkboard-teacher" aria-hidden="true"
+            title="External link"></i></a></td>
+		  <td></td>
+	  
+	  </tr>
+	  
+	  
+	  <tr>
+      <td><input type="checkbox" /></td>
+      <td> Reading from IMS book</td>
+      <td>Sections 5.2</td>
+      <td><a href="https://openintro-ims.netlify.app/intro-stat-inference.html#boot-ci" target = "_blank">
+            <i class="fas fa-book" aria-hidden="true"
+			   title="Link to reading"></i></a> </td>
+      <td></td>
+    </tr>
+	   
+	  	 
+	  
+	  
+	  <tr>
+      <td><input type="checkbox" /></td>
+      <td>Variance and Bootstrapping Quiz</td>
+      <td>In the repo for weekly materials. After you are done, do not forget to push it.</td>
+      <td><a href="https://github.com/ics80-fa20"
+            target = "_blank"><i class="fab fa-github"
+            aria-hidden="true"
+            title="External link to GitHub"></i></a></td>
+      <td>Nov 19, 11:59 pm</td>
+    </tr> 
+	  
+	 <tr>
+      <td><input type="checkbox" /></td>
+      <td>Final Project Proposal</td>
+      <td>Instructions are in the Week 6 repo.</td>
+      <td><a href="https://github.com/ics80-fa20"
+            target = "_blank"><i class="fab fa-github"
+            aria-hidden="true"
+            title="External link to GitHub"></i></a></td>
+      <td>Nov 20, 11:59 pm</td>
+    </tr> 
 
-    <div class="load-html"  data-source="navbar.html"></div>
+	  
 
-
-    <div class = "main-text">
-
-      <div class="container" >
-        <div class="row" >
-
-          <div class="col text-center">
-            <i class="fas fa-hard-hat" style="font-size:50px; color:#ae8f68; "></i>
-
-          </div>
-        </div>
-        <div class="row">
-
-      <div class="col text-center" >
-        <span style = "font-size:30px">Under Construction</span>
-
-      </div>
-      </div>
-
-      <hr style="width: 100%;
-      background-color: #ae8f68;
-      height: 1px; border-color : transparent;" />
-
-
-      </div>
-
-
-    </div>
-
-
-    <div class="load-html"  data-source="footer.html"></div>
-
-
-  </body>
+	  
+  </table>
+  
+  <!--
+Blank table overflow
+<tr>
+  <td><input type="checkbox" /></td>
+  <td> </td>
+  <td> </td>
+  <td></td>
+</tr>
+--> 
+  
+</div>
+<div class="load-html"  data-source="footer.html"></div>
+</body>
 </html>

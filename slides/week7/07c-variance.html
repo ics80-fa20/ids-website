@@ -41,15 +41,17 @@ class: inverse middle
 
 --
 
-- We want to understand if Android users spend more time on their phones when compared to iOS users. What if everyone spent 3 hours per day on their phones?
+- We want to understand if Android users spend more time on their phones when compared to iOS users. What if everyone spent 3 hours per day on their phones? (`time` = {3, 3,..., 3}, `os` = {Android, Android, .... iOS})
 
 --
 
-- We want to understand, if birth height and weight are positively associated in babies. What if every baby was 7.5 lbs? (`weight` = {7.5, 7.5,..., 7.5})
+- We want to understand, if birth height and weight are positively associated in babies. What if every baby was 7.5 lbs? (`weight` = {7.5, 7.5,..., 7.5}, `height` = {20, 22,..., 18})
 
---
+---
 
-In all this scenarios there would be no **variance**. The variables mentioned would all be constants thus would not even be a **vari**able.
+class: middle
+
+In all this fake scenarios there would be no **variance** in `sleep`, `graduate`, `time`, `weight`. These variables would all be constants thus would not even be a **vari**able.
 
 ---
 
@@ -82,10 +84,10 @@ class: inverse middle
 
 Consider the following data which represents the number of hours slept for 10 people who were surveyed.
 
-`\(x_i = \{7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8\}\)`
+`\(y_i = \{7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8\}\)`
 
 ```r
-x_i &lt;- c(7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8)
+y_i &lt;- c(7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8)
 ```
 
 
@@ -93,14 +95,14 @@ x_i &lt;- c(7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8)
 
 
 ```r
-mean(x_i)
+mean(y_i)
 ```
 
 ```
 ## [1] 7.72
 ```
 
-`\(\bar x = 7.72 \text{hr}\)`
+`\(\bar y = 7.72 \text{ hr}\)`
 
 ---
 
@@ -108,14 +110,22 @@ mean(x_i)
 
 
 ```r
-length(sleep)
+length(y_i)
 ```
 
 ```
-## [1] 3
+## [1] 10
 ```
 
 `\(n = 10\)`
+
+--
+
+`\(i = \{1, 2, ... n\}\)`
+
+--
+
+`\(i = \{1, 2, ... 10\}\)`
 
 ---
 
@@ -124,7 +134,7 @@ length(sleep)
 
 
 ```r
-sd(x_i)
+sd(y_i)
 ```
 
 ```
@@ -139,7 +149,7 @@ sd(x_i)
 
 
 ```r
-var(x_i)
+var(y_i)
 ```
 
 ```
@@ -155,7 +165,7 @@ var(x_i)
 &lt;br&gt;
 &lt;br&gt;
 
-`\(n = 10\)`, `\(\bar x = 7.72 \text{hr}\)`, `\(s = 1.218195 \text{hr}\)`
+`\(n = 10\)`, `\(\bar y = 7.72 \text{ hr}\)`, `\(s = 1.218195 \text{ hr}\)`
 
 Among 10 people the average number of sleep was 7.72 hours. However, everybody did not sleep 7.72 hours. There was deviation from the mean. The standard deviation from the mean was 1.218195 hours. The variance is the squared standard deviation which was `\(1.484 \text{ hr}^2\)`. 
 
@@ -171,7 +181,7 @@ class: inverse middle
 &lt;table align = "center"&gt;
 &lt;thead&gt;
 
-&lt;th&gt;x&lt;sub&gt;i&lt;/sub&gt; &lt;/th&gt; &lt;th&gt;  x&lt;sub&gt;i&lt;/sub&gt; - x&amp;#772 &lt;/th&gt; &lt;th&gt; (x&lt;sub&gt;i&lt;/sub&gt; - x&amp;#772) &lt;sup&gt;2&lt;/sup&gt;&lt;/th&gt;
+&lt;th&gt;y&lt;sub&gt;i&lt;/sub&gt; &lt;/th&gt; &lt;th&gt;  y&lt;sub&gt;i&lt;/sub&gt; - y&amp;#772 &lt;/th&gt; &lt;th&gt; (y&lt;sub&gt;i&lt;/sub&gt; - y&amp;#772) &lt;sup&gt;2&lt;/sup&gt;&lt;/th&gt;
 &lt;/thead&gt;
 
 &lt;tr&gt; 
@@ -221,7 +231,7 @@ class: inverse middle
 ## Total distance from the mean
 
 
-`\(\Sigma_{i = 1}^{n} (x_i - \bar x )^2 =\)`
+`\(\Sigma_{i = 1}^{n} (y_i - \bar y )^2 =\)`
 
 `\(4.9284 + 0.5184 + 0.5184 + 0.2704 + 0.0484 +\)` 
 `\(0.0784 + 0.0784 + 0.0784+ 1.6384 + 5.1984 = 13.356 \text{ hr}^2\)`
@@ -234,7 +244,7 @@ class: inverse middle
 &lt;br&gt;    
 .formula[
 
-`$$s^2 = \frac{\Sigma_{i = 1}^{n} (x_i - \bar x )^2}{n-1}$$` 
+`$$s^2 = \frac{\Sigma_{i = 1}^{n} (y_i - \bar y )^2}{n-1}$$` 
 
 ]
 
@@ -256,7 +266,7 @@ class: inverse middle
 
 &lt;tr&gt;
 &lt;td&gt;Mean&lt;/td&gt;
-&lt;td&gt; x&amp;#772; &lt;/td&gt;
+&lt;td&gt; y&amp;#772; &lt;/td&gt;
 &lt;td&gt; &amp;mu;&lt;/td&gt;
 
 &lt;/tr&gt;

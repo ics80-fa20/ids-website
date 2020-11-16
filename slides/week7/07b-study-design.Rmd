@@ -101,14 +101,6 @@ class: center middle
 
 Does exercising regularly increase GPA for UCI students?
 
-
----
-
-## Practice
-
-What is the explanatory variable?  
-What is the response variable?
-
 ---
 ## Experiment Design
 
@@ -139,7 +131,7 @@ A doctor has developed a drug called drug `i.d.s.` to treat some disease. She wa
 
 --
 
-Plot twist: The doctor suspects that the drug may affect adults and kids differently.
+The doctor suspects that the drug may affect adults and kids differently.
 
 --
 

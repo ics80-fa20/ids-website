@@ -47,15 +47,17 @@ class: inverse middle
 
 --
 
-- We want to understand if Android users spend more time on their phones when compared to iOS users. What if everyone spent 3 hours per day on their phones?
+- We want to understand if Android users spend more time on their phones when compared to iOS users. What if everyone spent 3 hours per day on their phones? (`time` = {3, 3,..., 3}, `os` = {Android, Android, .... iOS})
 
 --
 
-- We want to understand, if birth height and weight are positively associated in babies. What if every baby was 7.5 lbs? (`weight` = {7.5, 7.5,..., 7.5})
+- We want to understand, if birth height and weight are positively associated in babies. What if every baby was 7.5 lbs? (`weight` = {7.5, 7.5,..., 7.5}, `height` = {20, 22,..., 18})
 
---
+---
 
-In all this scenarios there would be no **variance**. The variables mentioned would all be constants thus would not even be a **vari**able.
+class: middle
+
+In all this fake scenarios there would be no **variance** in `sleep`, `graduate`, `time`, `weight`. These variables would all be constants thus would not even be a **vari**able.
 
 ---
 
@@ -88,29 +90,37 @@ class: inverse middle
 
 Consider the following data which represents the number of hours slept for 10 people who were surveyed.
 
-$x_i = \{7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8\}$
+$y_i = \{7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8\}$
 ```{r}
-x_i <- c(7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8)
+y_i <- c(7, 7.5, 8, 5.5, 10, 7.2, 7, 8, 9, 8)
 ```
 
 
 --
 
 ```{r}
-mean(x_i)
+mean(y_i)
 ```
 
-$\bar x = 7.72 \text{hr}$
+$\bar y = 7.72 \text{ hr}$
 
 ---
 
 ## Sample Size
 
 ```{r}
-length(sleep)
+length(y_i)
 ```
 
 $n = 10$
+
+--
+
+$i = \{1, 2, ... n\}$
+
+--
+
+$i = \{1, 2, ... 10\}$
 
 ---
 
@@ -118,7 +128,7 @@ $n = 10$
 .pull-left[## Standard Deviation
 
 ```{r}
-sd(x_i)
+sd(y_i)
 ```
 
 $s = 1.218195 \text{ hr}$
@@ -128,7 +138,7 @@ $s = 1.218195 \text{ hr}$
 .pull-right[## Variance
 
 ```{r}
-var(x_i)
+var(y_i)
 ```
 
 $s^2 = 1.484 \text{ hr}^2$
@@ -140,7 +150,7 @@ $s^2 = 1.484 \text{ hr}^2$
 <br>
 <br>
 
-$n = 10$, $\bar x = 7.72 \text{hr}$, $s = 1.218195 \text{hr}$
+$n = 10$, $\bar y = 7.72 \text{ hr}$, $s = 1.218195 \text{ hr}$
 
 Among 10 people the average number of sleep was 7.72 hours. However, everybody did not sleep 7.72 hours. There was deviation from the mean. The standard deviation from the mean was 1.218195 hours. The variance is the squared standard deviation which was $1.484 \text{ hr}^2$. 
 
@@ -156,7 +166,7 @@ class: inverse middle
 <table align = "center">
 <thead>
 
-<th>x<sub>i</sub> </th> <th>  x<sub>i</sub> - x&#772 </th> <th> (x<sub>i</sub> - x&#772) <sup>2</sup></th>
+<th>y<sub>i</sub> </th> <th>  y<sub>i</sub> - y&#772 </th> <th> (y<sub>i</sub> - y&#772) <sup>2</sup></th>
 </thead>
 
 <tr> 
@@ -206,7 +216,7 @@ class: inverse middle
 ## Total distance from the mean
 
 
-$\Sigma_{i = 1}^{n} (x_i - \bar x )^2 =$
+$\Sigma_{i = 1}^{n} (y_i - \bar y )^2 =$
 
 $4.9284 + 0.5184 + 0.5184 + 0.2704 + 0.0484 +$ 
 $0.0784 + 0.0784 + 0.0784+ 1.6384 + 5.1984 = 13.356 \text{ hr}^2$
@@ -219,7 +229,7 @@ $0.0784 + 0.0784 + 0.0784+ 1.6384 + 5.1984 = 13.356 \text{ hr}^2$
 <br>    
 .formula[
 
-$$s^2 = \frac{\Sigma_{i = 1}^{n} (x_i - \bar x )^2}{n-1}$$ 
+$$s^2 = \frac{\Sigma_{i = 1}^{n} (y_i - \bar y )^2}{n-1}$$ 
 
 ]
 
@@ -241,7 +251,7 @@ $$s^2= \frac{13.356}{10-1} = 1.484\text{ hr}^2$$
 
 <tr>
 <td>Mean</td>
-<td> x&#772; </td>
+<td> y&#772; </td>
 <td> &mu;</td>
 
 </tr>

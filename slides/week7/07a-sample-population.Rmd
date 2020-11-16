@@ -139,7 +139,7 @@ A cell phone factory wants to do quality control of their products to ensure tha
 
 ## Generalizibility 
 
-Why do we care to have a sample that is **representative** of the population.
+Why do we care to have a sample that is **representative** of the population?
 
 --
 

@@ -145,8 +145,8 @@ Median of sample 4 is `r as.double(median(sample_4$base_pay))`.
 
 - How can we take sampling variability into account when we only have one sample?
 
-    - There are many was to do this. We will use **bootstrapping** in this class.
-    - If you want to learn more on estimating population parameters using sample data, I encourage you to take statistics classes. 
+    - There are different ways to do this. We will use **bootstrapping** in this class.
+    - If you want to learn more on estimating population parameters using sample data, I encourage you to take a statistics classes. 
 
 ---
 
@@ -309,13 +309,32 @@ visualize(boot) +
              color = "black")
 ```
 
-
 ---
 
-## 
+## Interpretation of Confidence Intervals
 
 .font50[`r fontawesome::fa("exclamation-triangle", fill = "black")`] Calculating a confidence interval does not guarantee that we will capture the true value of population parameter in the interval. 
 
 --
 
 If we were to take considerable large number of samples (we only had one sample) and construct 95% confidence intervals for each of the samples we would expect about 95% of the confidence intervals to capture the the true value of population parameter in the interval.
+
+
+---
+
+## Take-Away Messages
+
+- Sample statistics $\neq$ population parameter.
+
+--
+
+- Different samples can have different statistics, thus there is sampling variability.
+
+--
+
+- We have constructed a confidence interval to infer about a median but we could do this for mean, proportion, difference between two group means etc. 
+
+--
+
+- More on constructing confidence intervals (and hypothesis testing) in other statistics classes. In this class, we will focus on using and interpreting confidence intervals. R will do the calculations for us. 
+
