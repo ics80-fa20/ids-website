@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Multiple Linear Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Mine Dogucu" />
+    <script src="08c-mlr_files/header-attrs-2.5/header-attrs.js"></script>
+    <link rel="stylesheet" href="slide-style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+&lt;br&gt;
+&lt;br&gt;
+.pull-right[ 
+
+# Multiple Linear Regression
+## Dr. Mine Dogucu
+]
+
+---
+
+
+
+
+#### Data `babies` in `openintro` package
+
+
+```
+## Rows: 1,236
+## Columns: 8
+## $ case      &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+## $ bwt       &lt;int&gt; 120, 113, 128, 123, 108, 136, 138, 132, 120, 143, 140, 144,…
+## $ gestation &lt;int&gt; 284, 282, 279, NA, 282, 286, 244, 245, 289, 299, 351, 282, …
+## $ parity    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ age       &lt;int&gt; 27, 33, 28, 36, 23, 25, 33, 23, 25, 30, 27, 32, 23, 36, 30,…
+## $ height    &lt;int&gt; 62, 64, 64, 69, 67, 62, 62, 65, 62, 66, 68, 64, 63, 61, 63,…
+## $ weight    &lt;int&gt; 100, 135, 115, 190, 125, 93, 178, 140, 125, 136, 120, 124, …
+## $ smoke     &lt;int&gt; 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1,…
+```
+
+---
+
+
+class: middle
+
+&lt;div align = "center"&gt;
+
+| y | Response    | Birth weight | Numeric |
+|---|-------------|-----------------|---------|
+| `\(x_1\)` | Explanatory | Gestation           | Numeric |
+| `\(x_2\)` | Explanatory | Smoke           | Categorical |
+
+---
+
+## Notation
+
+`\(y_i = \beta_0 +\beta_1x_{1i}  + \beta_2x_{2i} + \epsilon_i\)`
+
+`\(\beta_0\)` is intercept  
+`\(\beta_1\)` is the slope for gestation   
+`\(\beta_2\)` is the slope for smoke 
+`\(\epsilon_i\)` is error/residual  
+`\(i = 1, 2, ...n\)` identifier for each point
+
+
+---
+
+
+```r
+model_gs &lt;- lm(bwt ~ gestation + smoke, data = babies)
+tidy(model_gs)
+```
+
+```
+## # A tibble: 3 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   -0.932    8.15      -0.114 9.09e- 1
+## 2 gestation      0.443    0.0290    15.3   3.16e-48
+## 3 smoke         -8.09     0.953     -8.49  5.96e-17
+```
+
+--
+
+Expected birth weight for a baby who had 280 days of gestation with a smoker mother
+
+`\(\hat {\text{bwt}_i} = b_0 + b_1 \text{ gestation}_i + b_2 \text{ smoke}_i\)`
+
+`\(\hat {\text{bwt}_i} = -0.932 + (0.443 \times 280) + (-8.09 \times 1)\)`
+
+---
+
+
+```r
+babies %&gt;% 
+  modelr::add_predictions(model_gs) %&gt;% 
+  select(bwt, gestation, smoke, pred)
+```
+
+```
+## # A tibble: 1,236 x 4
+##      bwt gestation smoke  pred
+##    &lt;int&gt;     &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+##  1   120       284     0  125.
+##  2   113       282     0  124.
+##  3   128       279     1  115.
+##  4   123        NA     0   NA 
+##  5   108       282     1  116.
+##  6   136       286     0  126.
+##  7   138       244     0  107.
+##  8   132       245     0  108.
+##  9   120       289     0  127.
+## 10   143       299     1  123.
+## # … with 1,226 more rows
+```
+
+---
+
+
+```r
+babies %&gt;% 
+  modelr::add_predictions(model_gs) %&gt;% 
+  modelr::add_residuals(model_gs) %&gt;% 
+  select(bwt, gestation, smoke, pred, resid)
+```
+
+```
+## # A tibble: 1,236 x 5
+##      bwt gestation smoke  pred  resid
+##    &lt;int&gt;     &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1   120       284     0  125.  -4.84
+##  2   113       282     0  124. -11.0 
+##  3   128       279     1  115.  13.5 
+##  4   123        NA     0   NA   NA   
+##  5   108       282     1  116.  -7.87
+##  6   136       286     0  126.  10.3 
+##  7   138       244     0  107.  30.9 
+##  8   132       245     0  108.  24.4 
+##  9   120       289     0  127.  -7.05
+## 10   143       299     1  123.  19.6 
+## # … with 1,226 more rows
+```
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "pygments",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

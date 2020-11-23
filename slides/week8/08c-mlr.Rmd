@@ -1,0 +1,100 @@
+---
+title: "Multiple Linear Regression"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: slide-style.css
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+    anchor_sections: FALSE
+---
+
+class: title-slide
+
+
+<br>
+<br>
+.pull-right[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+---
+
+
+```{r echo = FALSE, message = FALSE}
+library(tidyverse)
+library(openintro)
+library(broom)
+theme_set(theme_gray(base_size = 18))
+```
+
+#### Data `babies` in `openintro` package
+
+```{r echo = FALSE}
+glimpse(babies)
+```
+
+---
+
+
+class: middle
+
+<div align = "center">
+
+| y | Response    | Birth weight | Numeric |
+|---|-------------|-----------------|---------|
+| $x_1$ | Explanatory | Gestation           | Numeric |
+| $x_2$ | Explanatory | Smoke           | Categorical |
+
+---
+
+## Notation
+
+$y_i = \beta_0 +\beta_1x_{1i}  + \beta_2x_{2i} + \epsilon_i$
+
+$\beta_0$ is intercept  
+$\beta_1$ is the slope for gestation   
+$\beta_2$ is the slope for smoke 
+$\epsilon_i$ is error/residual  
+$i = 1, 2, ...n$ identifier for each point
+
+
+---
+
+```{r}
+model_gs <- lm(bwt ~ gestation + smoke, data = babies)
+tidy(model_gs)
+```
+
+--
+
+Expected birth weight for a baby who had 280 days of gestation with a smoker mother
+
+$\hat {\text{bwt}_i} = b_0 + b_1 \text{ gestation}_i + b_2 \text{ smoke}_i$
+
+$\hat {\text{bwt}_i} = -0.932 + (0.443 \times 280) + (-8.09 \times 1)$
+
+---
+
+```{r}
+babies %>% 
+  modelr::add_predictions(model_gs) %>% 
+  select(bwt, gestation, smoke, pred)
+```
+
+---
+
+```{r}
+babies %>% 
+  modelr::add_predictions(model_gs) %>% 
+  modelr::add_residuals(model_gs) %>% 
+  select(bwt, gestation, smoke, pred, resid)
+```
+
+

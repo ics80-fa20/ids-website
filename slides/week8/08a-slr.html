@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Simple Linear Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Mine Dogucu" />
+    <script src="08a-slr_files/header-attrs-2.5/header-attrs.js"></script>
+    <link rel="stylesheet" href="slide-style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+&lt;br&gt;
+&lt;br&gt;
+.pull-right[ 
+
+# Simple Linear Regression
+## Dr. Mine Dogucu
+]
+
+---
+
+
+
+
+#### Data `babies` in `openintro` package
+
+
+```
+## Rows: 1,236
+## Columns: 8
+## $ case      &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+## $ bwt       &lt;int&gt; 120, 113, 128, 123, 108, 136, 138, 132, 120, 143, 140, 144,…
+## $ gestation &lt;int&gt; 284, 282, 279, NA, 282, 286, 244, 245, 289, 299, 351, 282, …
+## $ parity    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ age       &lt;int&gt; 27, 33, 28, 36, 23, 25, 33, 23, 25, 30, 27, 32, 23, 36, 30,…
+## $ height    &lt;int&gt; 62, 64, 64, 69, 67, 62, 62, 65, 62, 66, 68, 64, 63, 61, 63,…
+## $ weight    &lt;int&gt; 100, 135, 115, 190, 125, 93, 178, 140, 125, 136, 120, 124, …
+## $ smoke     &lt;int&gt; 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1,…
+```
+
+---
+
+##  Baby Weights
+
+.pull-left[
+
+```r
+ggplot(babies, 
+       aes(x = gestation, y = bwt)) +
+  geom_point()
+```
+
+]
+
+.pull-right[
+
+&lt;img src="08a-slr_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+---
+
+##  Baby Weights
+
+.pull-left[
+
+```r
+ggplot(babies,
+         aes(x = gestation, y = bwt)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) 
+```
+
+`lm` stands for linear model  
+`se` stands for standard error
+]
+
+.pull-right[
+
+&lt;img src="08a-slr_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+]
+
+
+
+---
+
+class: middle
+
+&lt;div align = "center"&gt;
+
+| y | Response    | Birth weight | Numeric |
+|---|-------------|-----------------|---------|
+| x | Explanatory | Gestation           | Numeric |
+
+
+---
+
+## Linear Equations Review
+
+
+.pull-left[
+
+Recall from your previous math classes
+
+`\(y = mx + b\)`
+
+where `\(m\)` is the slope and `\(b\)` is the y-intercept
+
+e.g. `\(y = 2x -1\)`
+]
+
+--
+
+
+
+.pull-right[
+![](08a-slr_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+Notice anything different between baby weights plot and this one?
+]
+
+---
+
+class: middle 
+
+.pull-left[
+
+**Math** class
+
+`\(y = b + mx\)`
+
+`\(b\)` is y-intercept  
+`\(m\)` is slope  
+]
+
+
+.pull-left[
+
+**Stats** class
+
+`\(y_i = \beta_0 +\beta_1x_i + \epsilon_i\)`
+
+`\(\beta_0\)` is y-intercept  
+`\(\beta_1\)` is slope  
+`\(\epsilon_i\)` is error/residual  
+`\(i = 1, 2, ...n\)` identifier for each point
+]
+
+---
+
+
+```r
+model_g &lt;- lm(bwt ~ gestation, data = babies)
+```
+
+`lm` stands for linear model. We are fitting a linear regression model. Note that the variables are entered in y ~ x order.
+
+---
+
+
+```r
+broom::tidy(model_g)
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)  -10.1      8.32       -1.21 2.27e- 1
+## 2 gestation      0.464    0.0297     15.6  3.22e-50
+```
+
+
+--
+`\(\hat {y}_i = b_0 + b_1 x_i\)`
+
+`\(\hat {\text{bwt}_i} = b_0 + b_1 \text{ gestation}_i\)`
+
+`\(\hat {\text{bwt}_i} = -10.1 + 0.464\text{ gestation}_i\)`
+
+---
+
+class: middle
+
+## Expected bwt for a baby with 300 days of gestation
+
+`\(\hat {\text{bwt}_i} = -10.1 + 0.464\text{ gestation}_i\)`
+
+`\(\hat {\text{bwt}} = -10.1 + 0.464 \times 300\)`
+
+`\(\hat {\text{bwt}} =\)` 129.1
+
+
+For a baby with 300 days of gestation the expected birth weight is 129.1 ounces.
+
+---
+
+## Interpretation of estimates
+
+.pull-left[
+&lt;img src="08a-slr_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+`\(b_1 = 0.464\)` which means for one unit(day) increase in gestation period the expected increase in birth weight is 0.464 ounces.
+
+]
+
+--
+
+.pull-right[
+&lt;img src="08a-slr_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+`\(b_0 = -10.1\)` which means for gestation period of 0 days the expected birth weight is -10.1 ounces!!!!!!!!
+(does NOT make sense)
+]
+
+---
+
+class: middle
+
+## Extrapolation
+
+- There is no such thing as 0 days of gestation.
+
+--
+
+- Birth weight cannot possibly be -10.1 ounces.
+
+--
+
+- Extrapolation happens when we use a model outside the range of the x-values that are observed. After all, we cannot really know how the model behaves (e.g. may be non-linear) outside of the scope of what we have observed. 
+
+---
+
+## Baby number 148
+
+.pull-left[
+
+
+```r
+babies %&gt;% 
+  filter(case == 148) %&gt;% 
+  select(bwt, gestation)
+```
+
+```
+## # A tibble: 1 x 2
+##     bwt gestation
+##   &lt;int&gt;     &lt;int&gt;
+## 1   160       300
+```
+
+]
+
+.pull-right[
+
+![](08a-slr_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+
+]
+
+---
+
+
+
+
+## Baby #148
+
+.pull-left[
+
+**Expected**
+
+`\(\hat y_{148} = b_0 +b_1x_{148}\)`
+
+`\(\hat y_{148} = -10.1 + 0.464\times300\)`
+
+`\(\hat y_{148}\)` = 129.1
+
+
+]
+
+.pull-left[
+
+**Observed**
+
+`\(y_{148} =\)` 160
+
+]
+
+---
+
+## Residual for `i = 148`
+
+.pull-left[
+
+&lt;img src="08a-slr_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+
+
+]
+
+.pull-right[
+
+`\(y_{148} = 160\)`
+
+
+&lt;hr&gt;
+
+`\(\hat y_{148}\)` = 129.1
+
+
+&lt;hr&gt;
+
+`\(e_{148} = y_{148} - \hat y_{148}\)`
+
+`\(e_{148} =\)` 30.9
+
+
+]
+
+---
+
+## Least Squares Regression 
+
+The goal is to minimize 
+
+`$$e_1^2 + e_2^2 + ... + e_n^2$$`
+
+--
+
+which can be rewritten as 
+
+`$$\sum_{i = 1}^n e_i^2$$`
+
+---
+
+## Conditions for Least Squares Regression
+
+- Linearity
+
+- Normality of Residuals 
+
+- Constant Variance
+
+- Independence
+
+
+---
+
+.pull-left[
+
+.center[**Linear**]
+![](08a-slr_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+.center[**Non-linear**]
+![](08a-slr_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+.pull-left[
+
+.center[**Nearly normal**]
+
+![](08a-slr_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+.center[**Not normal**]
+
+
+![](08a-slr_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+.pull-left[
+
+.center[**Constant Variance**]
+
+![](08a-slr_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+.center[**Non-constant variance**]
+
+
+![](08a-slr_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+class: middle
+
+## Independence
+
+Harder to check because we need to know how the data were collected.
+
+--
+
+In the description of the dataset it says _[a study]considered all pregnancies between 1960 and 1967 among women in the Kaiser Foundation Health Plan in the San Francisco East Bay area._
+
+--
+
+It is possible that babies born in the same hospital may have similar birth weight. 
+
+--
+
+Correlated data examples: patients within hospitals, students within schools, people within neighborhoods, time-series data. 
+
+---
+
+class: middle
+
+### Inference: Confidence Interval
+
+
+```r
+confint(model_g)
+```
+
+```
+##                   2.5 %    97.5 %
+## (Intercept) -26.3915884 6.2632199
+## gestation     0.4059083 0.5226169
+```
+
+Note that the confidence interval for the slope does not contain zero and all the values in the interval are positive indicating a possible positive relationship between gestation and birth weight.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "pygments",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
