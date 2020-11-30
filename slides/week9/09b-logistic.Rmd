@@ -1,0 +1,433 @@
+---
+title: "Logistic Regression"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: slide-style.css
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+    anchor_sections: FALSE
+---
+
+class: title-slide
+
+
+<br>
+<br>
+.pull-right[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+
+
+---
+
+class: middle
+
+In all our models, we have worked with numeric response variables. We will now consider categorical response (with two levels) using logistic regression.
+
+---
+
+```{r echo = FALSE, message = FALSE}
+library(tidyverse)
+library(broom)
+library(openintro)
+theme_set(theme_gray(base_size = 18))
+```
+
+
+
+
+[Are Emily and Greg More Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination](https://www.nber.org/papers/w9873). 
+
+
+- Researchers respond to help-wanted ads in Boston and Chicago newspapers with fictitious resumes.
+
+--
+
+- They randomly assign White sounding names to half the resumes and African American sounding names to the other half.
+
+--
+
+- They create high quality resumes (more experience, likely to have an email address etc.) and low quality resumes. 
+
+- For each job ad they send four resumes (two high quality and two low quality.)
+
+---
+
+## Data
+
+```{r echo=FALSE, message=FALSE}
+data(resume)
+resume <- resume %>% 
+  mutate(received_callback = as.logical(received_callback))
+```
+
+```{r}
+resume <- resume %>% 
+  select(received_callback, race, years_experience, 
+         job_city)
+
+glimpse(resume)
+```
+
+
+---
+
+Response variable: `received_callback`
+
+.pull-left[
+```{r}
+count(resume, received_callback) %>% 
+  mutate(prop = n / sum(n))
+```
+]
+
+.pull-right[
+```{r fig.height=6, echo = FALSE}
+ggplot(resume, aes(x = received_callback)) +
+  geom_bar()
+```
+
+]
+
+---
+
+## Notation
+
+$y_i$ = whether a (fictitious) job candidate receives a call back.
+
+$\pi_i$ = probability that the $i$th job candidate will receive a call back.
+
+$1-\pi_i$ = probability that the $i$th job candidate will **not** receive a call back.
+
+---
+
+### Where is the line?
+
+```{r fig.align='center', fig.height=4}
+ggplot(resume, aes(x = race, y = received_callback)) +
+  geom_point()
+```
+
+---
+
+## The Linear Model
+
+We can model the probability of receiving a callback with a linear model.
+
+$\text{transformation}(\pi_i) = \beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}$
+
+
+--
+
+$logit(\pi_i) = \beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}$
+
+--
+
+$logit(\pi_i) = log(\frac{\pi_i}{1-\pi_i})$
+
+
+--
+
+Note that log is natural log and not base 10. This is also the case for the `log()` function in R.
+
+---
+
+class: middle
+
+**Probability** $\pi_i$ Probability of receiving a callback.
+
+--
+
+**Odds** $\frac{\pi_i}{1-\pi_i}$ Odds of receiving a callback.
+
+--
+
+**Logit** $log(\frac{\pi_i}{1-\pi_i})$ Logit of receiving a callback.
+
+---
+
+class: middle
+
+```{r fig.height=6, echo=FALSE, fig.align='center'}
+ggplot(resume, aes(x = race, fill = received_callback)) +
+  geom_bar(position = "fill") +
+  ylab("proportion")
+```
+
+
+---
+
+### When race is black (0)
+
+```{r}
+resume %>% 
+  filter(race == "black") %>% 
+  count(received_callback) %>% 
+  mutate(prop = n / sum(n))
+```
+
+Note that R assigns 0 an 1 to levels of categorical variables in alphabetical order. In this case black (0) and white(1)
+
+
+---
+
+### When race is black (0)
+
+```{r}
+p_b <- resume %>% 
+  filter(race == "black") %>% 
+  count(received_callback) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  filter(received_callback == TRUE) %>% 
+  select(prop) %>% 
+  pull()
+  
+```
+
+Probability of receiving a callback when the candidate has a Black sounding name is `r p_b`.
+
+---
+
+### When race is white (1)
+
+```{r}
+p_w <- resume %>% 
+  filter(race == "white") %>% 
+  count(received_callback) %>% 
+  mutate(prop = n / sum(n)) %>% 
+  filter(received_callback == TRUE) %>% 
+  select(prop) %>% 
+  pull()
+```
+
+Probability of receiving a callback when the candidate has a white sounding name is `r p_w`.
+
+---
+
+.pull-left[
+
+
+```{r}
+p_b
+## Odds
+odds_b <- p_b / (1 - p_b)
+odds_b
+
+## Logit
+logit_b <- log(odds_b)
+logit_b
+```
+
+
+]
+
+--
+
+.pull-right[
+
+```{r}
+p_w
+## Odds
+odds_w <- p_w / (1 - p_w)
+odds_w
+
+## Logit
+logit_w <- log(odds_w)
+logit_w
+```
+]
+
+
+---
+.pull-left[
+```{r echo = FALSE, message=FALSE, fig.align='center', fig.height=4}
+result_data <- tibble(
+  race = c(0, 1),
+  logit = c(logit_b, logit_w)
+)
+
+coords <- paste(result_data$race, round(result_data$logit,2), sep = ", ")
+ggplot(result_data,
+       aes(x = race,
+           y = logit)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_x_continuous(breaks=c(0,1)) +
+  geom_label(aes(race + .1, logit,
+                 label = coords)) +
+  xlim(-0.05,1.2)
+
+```
+
+This is THE LINE of the linear model. As x increases by 1 unit, the expected change in the logit of receiving call back is `r logit_w - logit_b`. In this case, this is just the difference between logit for the white group and the black group. 
+]
+
+.pull-right[
+The slope of the line is:
+
+```{r}
+logit_w - logit_b
+```
+
+The intercept is 
+
+```{r}
+logit_b
+```
+
+
+]
+---
+
+```{r}
+model_r <- glm(received_callback ~ race,
+               data = resume,
+               family = binomial)
+```
+
+```{r}
+tidy(model_r)
+```
+
+$log(\frac{\pi_i}{1-\pi_i}) = -2.67 + 0.438\times racewhite_i$
+
+---
+
+class: middle center
+
+| Scale       | Range                  |
+|-------------|------------------------|
+| Probability | 0 to 1                 |
+| Odds        | 0 to $\infty$          |
+| Logit       | - $\infty$ to $\infty$ |
+
+---
+
+We will consider years of experience as an explanatory variable. Normally, we would also include race in the model and have multiple explanatory variables, however, for learning purposes, we will keep the model simple.
+
+```{r}
+model_y <- glm(received_callback ~ years_experience,
+               data = resume,
+               family = binomial)
+```
+
+```{r}
+tidy(model_y)
+```
+---
+
+```{r}
+model_y_summary <- tidy(model_y)
+
+intercept <- model_y_summary %>% 
+  filter(term == "(Intercept)") %>% 
+  select(estimate) %>% 
+  pull()
+
+slope <- model_y_summary %>% 
+  filter(term == "years_experience") %>% 
+  select(estimate) %>% 
+  pull()
+```
+
+---
+
+### From logit to odds
+
+Logit for a Candidate with 1 year of experience (rounded equation)
+
+$-2.76 +  0.0391 \times 1$
+
+--
+
+Odds for a Candidate with 1 year of experience
+
+$odds = e^{logit}$
+
+$\frac{\pi_i}{1-\pi_i} = e^{log(\frac{\pi_i}{1-\pi_i})}$
+
+$\frac{\hat\pi_i}{1-\hat\pi_i} = e^{-2.76 + 0.0391 \times 1}$
+
+
+---
+
+### From odds to probability
+
+$\pi_i = \frac{odds}{1+odds}$
+
+$\pi_i = \frac{\frac{\pi_i}{1-\pi_i}}{1+\frac{\pi_i}{1-\pi_i}}$
+
+$\hat\pi_i = \frac{e^{-2.76 + 0.0391 \times 1}}{1+e^{-2.76 + 0.0391 \times 1}} = 0.0618$
+
+Note you can use `exp()` function in R for exponentiating number e.
+
+```{r}
+exp(1)
+```
+
+---
+
+## Logistic Regression model 
+
+**Logit form:** 
+
+$log(\frac{\pi_i}{1-\pi_i}) = \beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}$
+
+**Probability form:**
+
+$\large{\pi_i = \frac{e^{\beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}}}{1+e^{\beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}}}}$
+
+---
+
+
+.left-panel[
+
+Estimated probability of a candidate with 0 years of experience receiving a callback
+
+$\hat\pi_i = \frac{e^{-2.76 + 0.0391 \times 0}}{1+e^{-2.76 + 0.0391 \times 0}} = 0.0595$
+
+]
+
+.right-panel[
+
+Estimated probability of a candidate with 1 year of experience receiving a callback
+
+$\hat\pi_i = \frac{e^{-2.76 + 0.0391 \times 1}}{1+e^{-2.76 + 0.0391 \times 1}} = 0.0618$
+]
+
+---
+
+```{r}
+model_ryc <- glm(received_callback ~ race + 
+                  years_experience + job_city,
+               data = resume,
+               family = binomial)
+```
+
+---
+
+```{r}
+tidy(model_ryc)
+```
+
+---
+
+The estimated probability that a Black candidate with 10 years of experience, residing in Boston, would receive a callback.
+
+$\large{\hat\pi_i = \frac{e^{-2.78 + (0.0440 \times 0) + (0.0332\times10) + (-0.0329\times 0)}}{1+e^{-2.78 + (0.0440 \times 0) + (0.0332\times10) + (-0.0329\times 0)}} = 0.0796}$
+
+
+
+---
+
+We have used the data for educational purposes. The original study considers many other variables that may influence whether someone receives a callback or not. Read the original study for other considerations.
+
+[Are Emily and Greg More Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination](https://www.nber.org/papers/w9873). 

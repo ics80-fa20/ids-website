@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Transformations</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Mine Dogucu" />
+    <script src="09a-transformations_files/header-attrs-2.5/header-attrs.js"></script>
+    <link rel="stylesheet" href="slide-style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+&lt;br&gt;
+&lt;br&gt;
+.pull-right[ 
+
+# Transformations
+## Dr. Mine Dogucu
+]
+
+---
+
+
+
+
+
+
+```r
+library(AmesHousing)
+ames_raw &lt;- janitor::clean_names(ames_raw)
+glimpse(ames_raw)
+```
+
+```
+## Rows: 2,930
+## Columns: 82
+## $ order           &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16…
+## $ pid             &lt;chr&gt; "0526301100", "0526350040", "0526351010", "0526353030…
+## $ ms_sub_class    &lt;chr&gt; "020", "020", "020", "020", "060", "060", "120", "120…
+## $ ms_zoning       &lt;chr&gt; "RL", "RH", "RL", "RL", "RL", "RL", "RL", "RL", "RL",…
+## $ lot_frontage    &lt;int&gt; 141, 80, 81, 93, 74, 78, 41, 43, 39, 60, 75, NA, 63, …
+## $ lot_area        &lt;int&gt; 31770, 11622, 14267, 11160, 13830, 9978, 4920, 5005, …
+## $ street          &lt;chr&gt; "Pave", "Pave", "Pave", "Pave", "Pave", "Pave", "Pave…
+## $ alley           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ lot_shape       &lt;chr&gt; "IR1", "Reg", "IR1", "Reg", "IR1", "IR1", "Reg", "IR1…
+## $ land_contour    &lt;chr&gt; "Lvl", "Lvl", "Lvl", "Lvl", "Lvl", "Lvl", "Lvl", "HLS…
+## $ utilities       &lt;chr&gt; "AllPub", "AllPub", "AllPub", "AllPub", "AllPub", "Al…
+## $ lot_config      &lt;chr&gt; "Corner", "Inside", "Corner", "Corner", "Inside", "In…
+## $ land_slope      &lt;chr&gt; "Gtl", "Gtl", "Gtl", "Gtl", "Gtl", "Gtl", "Gtl", "Gtl…
+## $ neighborhood    &lt;chr&gt; "NAmes", "NAmes", "NAmes", "NAmes", "Gilbert", "Gilbe…
+## $ condition_1     &lt;chr&gt; "Norm", "Feedr", "Norm", "Norm", "Norm", "Norm", "Nor…
+## $ condition_2     &lt;chr&gt; "Norm", "Norm", "Norm", "Norm", "Norm", "Norm", "Norm…
+## $ bldg_type       &lt;chr&gt; "1Fam", "1Fam", "1Fam", "1Fam", "1Fam", "1Fam", "Twnh…
+## $ house_style     &lt;chr&gt; "1Story", "1Story", "1Story", "1Story", "2Story", "2S…
+## $ overall_qual    &lt;int&gt; 6, 5, 6, 7, 5, 6, 8, 8, 8, 7, 6, 6, 6, 7, 8, 8, 8, 9,…
+## $ overall_cond    &lt;int&gt; 5, 6, 6, 5, 5, 6, 5, 5, 5, 5, 5, 7, 5, 5, 5, 5, 7, 2,…
+## $ year_built      &lt;int&gt; 1960, 1961, 1958, 1968, 1997, 1998, 2001, 1992, 1995,…
+## $ year_remod_add  &lt;int&gt; 1960, 1961, 1958, 1968, 1998, 1998, 2001, 1992, 1996,…
+## $ roof_style      &lt;chr&gt; "Hip", "Gable", "Hip", "Hip", "Gable", "Gable", "Gabl…
+## $ roof_matl       &lt;chr&gt; "CompShg", "CompShg", "CompShg", "CompShg", "CompShg"…
+## $ exterior_1st    &lt;chr&gt; "BrkFace", "VinylSd", "Wd Sdng", "BrkFace", "VinylSd"…
+## $ exterior_2nd    &lt;chr&gt; "Plywood", "VinylSd", "Wd Sdng", "BrkFace", "VinylSd"…
+## $ mas_vnr_type    &lt;chr&gt; "Stone", "None", "BrkFace", "None", "None", "BrkFace"…
+## $ mas_vnr_area    &lt;int&gt; 112, 0, 108, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 603…
+## $ exter_qual      &lt;chr&gt; "TA", "TA", "TA", "Gd", "TA", "TA", "Gd", "Gd", "Gd",…
+## $ exter_cond      &lt;chr&gt; "TA", "TA", "TA", "TA", "TA", "TA", "TA", "TA", "TA",…
+## $ foundation      &lt;chr&gt; "CBlock", "CBlock", "CBlock", "CBlock", "PConc", "PCo…
+## $ bsmt_qual       &lt;chr&gt; "TA", "TA", "TA", "TA", "Gd", "TA", "Gd", "Gd", "Gd",…
+## $ bsmt_cond       &lt;chr&gt; "Gd", "TA", "TA", "TA", "TA", "TA", "TA", "TA", "TA",…
+## $ bsmt_exposure   &lt;chr&gt; "Gd", "No", "No", "No", "No", "No", "Mn", "No", "No",…
+## $ bsmt_fin_type_1 &lt;chr&gt; "BLQ", "Rec", "ALQ", "ALQ", "GLQ", "GLQ", "GLQ", "ALQ…
+## $ bsmt_fin_sf_1   &lt;int&gt; 639, 468, 923, 1065, 791, 602, 616, 263, 1180, 0, 0, …
+## $ bsmt_fin_type_2 &lt;chr&gt; "Unf", "LwQ", "Unf", "Unf", "Unf", "Unf", "Unf", "Unf…
+## $ bsmt_fin_sf_2   &lt;int&gt; 0, 144, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1120, 0, …
+## $ bsmt_unf_sf     &lt;int&gt; 441, 270, 406, 1045, 137, 324, 722, 1017, 415, 994, 7…
+## $ total_bsmt_sf   &lt;int&gt; 1080, 882, 1329, 2110, 928, 926, 1338, 1280, 1595, 99…
+## $ heating         &lt;chr&gt; "GasA", "GasA", "GasA", "GasA", "GasA", "GasA", "GasA…
+## $ heating_qc      &lt;chr&gt; "Fa", "TA", "TA", "Ex", "Gd", "Ex", "Ex", "Ex", "Ex",…
+## $ central_air     &lt;chr&gt; "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"…
+## $ electrical      &lt;chr&gt; "SBrkr", "SBrkr", "SBrkr", "SBrkr", "SBrkr", "SBrkr",…
+## $ x1st_flr_sf     &lt;int&gt; 1656, 896, 1329, 2110, 928, 926, 1338, 1280, 1616, 10…
+## $ x2nd_flr_sf     &lt;int&gt; 0, 0, 0, 0, 701, 678, 0, 0, 0, 776, 892, 0, 676, 0, 0…
+## $ low_qual_fin_sf &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ gr_liv_area     &lt;int&gt; 1656, 896, 1329, 2110, 1629, 1604, 1338, 1280, 1616, …
+## $ bsmt_full_bath  &lt;int&gt; 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1,…
+## $ bsmt_half_bath  &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ full_bath       &lt;int&gt; 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 3, 2, 1,…
+## $ half_bath       &lt;int&gt; 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1,…
+## $ bedroom_abv_gr  &lt;int&gt; 3, 2, 3, 3, 3, 3, 2, 2, 2, 3, 3, 3, 3, 2, 1, 4, 4, 1,…
+## $ kitchen_abv_gr  &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ kitchen_qual    &lt;chr&gt; "TA", "TA", "Gd", "Ex", "TA", "Gd", "Gd", "Gd", "Gd",…
+## $ tot_rms_abv_grd &lt;int&gt; 7, 5, 6, 8, 6, 7, 6, 5, 5, 7, 7, 6, 7, 5, 4, 12, 8, 8…
+## $ functional      &lt;chr&gt; "Typ", "Typ", "Typ", "Typ", "Typ", "Typ", "Typ", "Typ…
+## $ fireplaces      &lt;int&gt; 2, 0, 0, 2, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1,…
+## $ fireplace_qu    &lt;chr&gt; "Gd", NA, NA, "TA", "TA", "Gd", NA, NA, "TA", "TA", "…
+## $ garage_type     &lt;chr&gt; "Attchd", "Attchd", "Attchd", "Attchd", "Attchd", "At…
+## $ garage_yr_blt   &lt;int&gt; 1960, 1961, 1958, 1968, 1997, 1998, 2001, 1992, 1995,…
+## $ garage_finish   &lt;chr&gt; "Fin", "Unf", "Unf", "Fin", "Fin", "Fin", "Fin", "RFn…
+## $ garage_cars     &lt;int&gt; 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 3,…
+## $ garage_area     &lt;int&gt; 528, 730, 312, 522, 482, 470, 582, 506, 608, 442, 440…
+## $ garage_qual     &lt;chr&gt; "TA", "TA", "TA", "TA", "TA", "TA", "TA", "TA", "TA",…
+## $ garage_cond     &lt;chr&gt; "TA", "TA", "TA", "TA", "TA", "TA", "TA", "TA", "TA",…
+## $ paved_drive     &lt;chr&gt; "P", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y", "Y"…
+## $ wood_deck_sf    &lt;int&gt; 210, 140, 393, 0, 212, 360, 0, 0, 237, 140, 157, 483,…
+## $ open_porch_sf   &lt;int&gt; 62, 0, 36, 0, 34, 36, 0, 82, 152, 60, 84, 21, 75, 0, …
+## $ enclosed_porch  &lt;int&gt; 0, 0, 0, 0, 0, 0, 170, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ x3ssn_porch     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ screen_porch    &lt;int&gt; 0, 120, 0, 0, 0, 0, 0, 144, 0, 0, 0, 0, 0, 0, 140, 21…
+## $ pool_area       &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ pool_qc         &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
+## $ fence           &lt;chr&gt; NA, "MnPrv", NA, NA, "MnPrv", NA, NA, NA, NA, NA, NA,…
+## $ misc_feature    &lt;chr&gt; NA, NA, "Gar2", NA, NA, NA, NA, NA, NA, NA, NA, "Shed…
+## $ misc_val        &lt;int&gt; 0, 0, 12500, 0, 0, 0, 0, 0, 0, 0, 0, 500, 0, 0, 0, 0,…
+## $ mo_sold         &lt;int&gt; 5, 6, 6, 4, 3, 6, 4, 1, 3, 6, 4, 3, 5, 2, 6, 6, 6, 6,…
+## $ yr_sold         &lt;int&gt; 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010,…
+## $ sale_type       &lt;chr&gt; "WD ", "WD ", "WD ", "WD ", "WD ", "WD ", "WD ", "WD …
+## $ sale_condition  &lt;chr&gt; "Normal", "Normal", "Normal", "Normal", "Normal", "No…
+## $ sale_price      &lt;int&gt; 215000, 105000, 172000, 244000, 189900, 195500, 21350…
+```
+
+---
+
+&lt;img src="09a-transformations_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+&lt;img src="09a-transformations_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+Note that log is natural log in R.
+
+---
+
+
+```r
+model_y &lt;- lm(log(sale_price) ~ year_built, 
+              data = ames_raw)
+tidy(model_y)
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept) -4.33     0.387        -11.2 1.73e- 28
+## 2 year_built   0.00829  0.000196      42.3 4.45e-305
+```
+
+`\({log(\hat y_i)} = b_0 + b_1x_{1i}\)`
+
+`\({log(\hat y_i)} = -4.33 + 0.00829x_{1i}\)`
+---
+
+Estimated sale price of a house built in 1980
+
+`\({log(\hat y_i)} = -4.33 + 0.00829 \times 1980\)`
+
+--
+
+`\(e^{log(\hat y_i)} = e^{-4.33 + 0.00829 \times 1980}\)`
+
+--
+
+`\(\hat y_i = e^{-4.33} \times e^ {0.00829 \times 1980} = 177052.2\)`
+
+--
+
+For one-unit (year) increase in x, the y is multiplied by `\(e^{b_1}\)`.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "pygments",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

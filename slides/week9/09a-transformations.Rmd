@@ -1,0 +1,93 @@
+---
+title: "Transformations"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: slide-style.css
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+    anchor_sections: FALSE
+---
+
+class: title-slide
+
+
+<br>
+<br>
+.pull-right[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+---
+
+
+```{r echo = FALSE, message = FALSE}
+library(tidyverse)
+
+library(broom)
+theme_set(theme_gray(base_size = 18))
+```
+
+
+```{r}
+library(AmesHousing)
+ames_raw <- janitor::clean_names(ames_raw)
+glimpse(ames_raw)
+```
+
+---
+
+```{r fig.align='center', echo=FALSE, message=FALSE}
+ggplot(ames_raw, aes(x = year_built, y = sale_price)) +
+  geom_point() +
+  scale_y_continuous(labels = scales::comma_format()) 
+  
+```
+
+
+---
+
+
+```{r fig.align='center', echo=FALSE}
+ggplot(ames_raw, aes(x = year_built, y = log(sale_price))) +
+  geom_point() +
+  scale_y_continuous(labels = scales::comma_format()) 
+  
+```
+
+Note that log is natural log in R.
+
+---
+
+```{r}
+model_y <- lm(log(sale_price) ~ year_built, 
+              data = ames_raw)
+tidy(model_y)
+```
+
+${log(\hat y_i)} = b_0 + b_1x_{1i}$
+
+${log(\hat y_i)} = -4.33 + 0.00829x_{1i}$
+---
+
+Estimated sale price of a house built in 1980
+
+${log(\hat y_i)} = -4.33 + 0.00829 \times 1980$
+
+--
+
+$e^{log(\hat y_i)} = e^{-4.33 + 0.00829 \times 1980}$
+
+--
+
+$\hat y_i = e^{-4.33} \times e^ {0.00829 \times 1980} = 177052.2$
+
+--
+
+For one-unit (year) increase in x, the y is multiplied by $e^{b_1}$.

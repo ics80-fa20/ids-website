@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Logistic Regression</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Mine Dogucu" />
+    <script src="09b-logistic_files/header-attrs-2.5/header-attrs.js"></script>
+    <link rel="stylesheet" href="slide-style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+&lt;br&gt;
+&lt;br&gt;
+.pull-right[ 
+
+# Logistic Regression
+## Dr. Mine Dogucu
+]
+
+
+
+---
+
+class: middle
+
+In all our models, we have worked with numeric response variables. We will now consider categorical response (with two levels) using logistic regression.
+
+---
+
+
+
+
+
+
+[Are Emily and Greg More Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination](https://www.nber.org/papers/w9873). 
+
+
+- Researchers respond to help-wanted ads in Boston and Chicago newspapers with fictitious resumes.
+
+--
+
+- They randomly assign White sounding names to half the resumes and African American sounding names to the other half.
+
+--
+
+- They create high quality resumes (more experience, likely to have an email address etc.) and low quality resumes. 
+
+- For each job ad they send four resumes (two high quality and two low quality.)
+
+---
+
+## Data
+
+
+
+
+```r
+resume &lt;- resume %&gt;% 
+  select(received_callback, race, years_experience, 
+         job_city)
+
+glimpse(resume)
+```
+
+```
+## Rows: 4,870
+## Columns: 4
+## $ received_callback &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FA…
+## $ race              &lt;chr&gt; "white", "white", "black", "black", "white", "white…
+## $ years_experience  &lt;int&gt; 6, 6, 6, 6, 22, 6, 5, 21, 3, 6, 8, 8, 4, 4, 5, 4, 5…
+## $ job_city          &lt;chr&gt; "Chicago", "Chicago", "Chicago", "Chicago", "Chicag…
+```
+
+
+---
+
+Response variable: `received_callback`
+
+.pull-left[
+
+```r
+count(resume, received_callback) %&gt;% 
+  mutate(prop = n / sum(n))
+```
+
+```
+## # A tibble: 2 x 3
+##   received_callback     n   prop
+##   &lt;lgl&gt;             &lt;int&gt;  &lt;dbl&gt;
+## 1 FALSE              4478 0.920 
+## 2 TRUE                392 0.0805
+```
+]
+
+.pull-right[
+![](09b-logistic_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+]
+
+---
+
+## Notation
+
+`\(y_i\)` = whether a (fictitious) job candidate receives a call back.
+
+`\(\pi_i\)` = probability that the `\(i\)`th job candidate will receive a call back.
+
+`\(1-\pi_i\)` = probability that the `\(i\)`th job candidate will **not** receive a call back.
+
+---
+
+### Where is the line?
+
+
+```r
+ggplot(resume, aes(x = race, y = received_callback)) +
+  geom_point()
+```
+
+&lt;img src="09b-logistic_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## The Linear Model
+
+We can model the probability of receiving a callback with a linear model.
+
+`\(\text{transformation}(\pi_i) = \beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}\)`
+
+
+--
+
+`\(logit(\pi_i) = \beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}\)`
+
+--
+
+`\(logit(\pi_i) = log(\frac{\pi_i}{1-\pi_i})\)`
+
+
+--
+
+Note that log is natural log and not base 10. This is also the case for the `log()` function in R.
+
+---
+
+class: middle
+
+**Probability** `\(\pi_i\)` Probability of receiving a callback.
+
+--
+
+**Odds** `\(\frac{\pi_i}{1-\pi_i}\)` Odds of receiving a callback.
+
+--
+
+**Logit** `\(log(\frac{\pi_i}{1-\pi_i})\)` Logit of receiving a callback.
+
+---
+
+class: middle
+
+&lt;img src="09b-logistic_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+### When race is black (0)
+
+
+```r
+resume %&gt;% 
+  filter(race == "black") %&gt;% 
+  count(received_callback) %&gt;% 
+  mutate(prop = n / sum(n))
+```
+
+```
+## # A tibble: 2 x 3
+##   received_callback     n   prop
+##   &lt;lgl&gt;             &lt;int&gt;  &lt;dbl&gt;
+## 1 FALSE              2278 0.936 
+## 2 TRUE                157 0.0645
+```
+
+Note that R assigns 0 an 1 to levels of categorical variables in alphabetical order. In this case black (0) and white(1)
+
+
+---
+
+### When race is black (0)
+
+
+```r
+p_b &lt;- resume %&gt;% 
+  filter(race == "black") %&gt;% 
+  count(received_callback) %&gt;% 
+  mutate(prop = n / sum(n)) %&gt;% 
+  filter(received_callback == TRUE) %&gt;% 
+  select(prop) %&gt;% 
+  pull()
+```
+
+Probability of receiving a callback when the candidate has a Black sounding name is 0.0644764.
+
+---
+
+### When race is white (1)
+
+
+```r
+p_w &lt;- resume %&gt;% 
+  filter(race == "white") %&gt;% 
+  count(received_callback) %&gt;% 
+  mutate(prop = n / sum(n)) %&gt;% 
+  filter(received_callback == TRUE) %&gt;% 
+  select(prop) %&gt;% 
+  pull()
+```
+
+Probability of receiving a callback when the candidate has a white sounding name is 0.0965092.
+
+---
+
+.pull-left[
+
+
+
+```r
+p_b
+```
+
+```
+## [1] 0.06447639
+```
+
+```r
+## Odds
+odds_b &lt;- p_b / (1 - p_b)
+odds_b
+```
+
+```
+## [1] 0.06892011
+```
+
+```r
+## Logit
+logit_b &lt;- log(odds_b)
+logit_b
+```
+
+```
+## [1] -2.674807
+```
+
+
+]
+
+--
+
+.pull-right[
+
+
+```r
+p_w
+```
+
+```
+## [1] 0.09650924
+```
+
+```r
+## Odds
+odds_w &lt;- p_w / (1 - p_w)
+odds_w
+```
+
+```
+## [1] 0.1068182
+```
+
+```r
+## Logit
+logit_w &lt;- log(odds_w)
+logit_w
+```
+
+```
+## [1] -2.236627
+```
+]
+
+
+---
+.pull-left[
+&lt;img src="09b-logistic_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+This is THE LINE of the linear model. As x increases by 1 unit, the expected change in the logit of receiving call back is 0.4381802. In this case, this is just the difference between logit for the white group and the black group. 
+]
+
+.pull-right[
+The slope of the line is:
+
+
+```r
+logit_w - logit_b
+```
+
+```
+## [1] 0.4381802
+```
+
+The intercept is 
+
+
+```r
+logit_b
+```
+
+```
+## [1] -2.674807
+```
+
+
+]
+---
+
+
+```r
+model_r &lt;- glm(received_callback ~ race,
+               data = resume,
+               family = binomial)
+```
+
+
+```r
+tidy(model_r)
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)   -2.67     0.0825    -32.4  1.59e-230
+## 2 racewhite      0.438    0.107       4.08 4.45e-  5
+```
+
+`\(log(\frac{\pi_i}{1-\pi_i}) = -2.67 + 0.438\times racewhite_i\)`
+
+---
+
+class: middle center
+
+| Scale       | Range                  |
+|-------------|------------------------|
+| Probability | 0 to 1                 |
+| Odds        | 0 to `\(\infty\)`          |
+| Logit       | - `\(\infty\)` to `\(\infty\)` |
+
+---
+
+We will consider years of experience as an explanatory variable. Normally, we would also include race in the model and have multiple explanatory variables, however, for learning purposes, we will keep the model simple.
+
+
+```r
+model_y &lt;- glm(received_callback ~ years_experience,
+               data = resume,
+               family = binomial)
+```
+
+
+```r
+tidy(model_y)
+```
+
+```
+## # A tibble: 2 x 5
+##   term             estimate std.error statistic   p.value
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)       -2.76     0.0962     -28.7  5.58e-181
+## 2 years_experience   0.0391   0.00918      4.26 2.07e-  5
+```
+---
+
+
+```r
+model_y_summary &lt;- tidy(model_y)
+
+intercept &lt;- model_y_summary %&gt;% 
+  filter(term == "(Intercept)") %&gt;% 
+  select(estimate) %&gt;% 
+  pull()
+
+slope &lt;- model_y_summary %&gt;% 
+  filter(term == "years_experience") %&gt;% 
+  select(estimate) %&gt;% 
+  pull()
+```
+
+---
+
+### From logit to odds
+
+Logit for a Candidate with 1 year of experience (rounded equation)
+
+`\(-2.76 +  0.0391 \times 1\)`
+
+--
+
+Odds for a Candidate with 1 year of experience
+
+`\(odds = e^{logit}\)`
+
+`\(\frac{\pi_i}{1-\pi_i} = e^{log(\frac{\pi_i}{1-\pi_i})}\)`
+
+`\(\frac{\hat\pi_i}{1-\hat\pi_i} = e^{-2.76 + 0.0391 \times 1}\)`
+
+
+---
+
+### From odds to probability
+
+`\(\pi_i = \frac{odds}{1+odds}\)`
+
+`\(\pi_i = \frac{\frac{\pi_i}{1-\pi_i}}{1+\frac{\pi_i}{1-\pi_i}}\)`
+
+`\(\hat\pi_i = \frac{e^{-2.76 + 0.0391 \times 1}}{1+e^{-2.76 + 0.0391 \times 1}} = 0.0618\)`
+
+Note you can use `exp()` function in R for exponentiating number e.
+
+
+```r
+exp(1)
+```
+
+```
+## [1] 2.718282
+```
+
+---
+
+## Logistic Regression model 
+
+**Logit form:** 
+
+`\(log(\frac{\pi_i}{1-\pi_i}) = \beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}\)`
+
+**Probability form:**
+
+`\(\large{\pi_i = \frac{e^{\beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}}}{1+e^{\beta_0 + \beta_1x_{1i}+\beta_2x_{2i} +.... \beta_kx_{ki}}}}\)`
+
+---
+
+
+.left-panel[
+
+Estimated probability of a candidate with 0 years of experience receiving a callback
+
+`\(\hat\pi_i = \frac{e^{-2.76 + 0.0391 \times 0}}{1+e^{-2.76 + 0.0391 \times 0}} = 0.0595\)`
+
+]
+
+.right-panel[
+
+Estimated probability of a candidate with 1 year of experience receiving a callback
+
+`\(\hat\pi_i = \frac{e^{-2.76 + 0.0391 \times 1}}{1+e^{-2.76 + 0.0391 \times 1}} = 0.0618\)`
+]
+
+---
+
+
+```r
+model_ryc &lt;- glm(received_callback ~ race + 
+                  years_experience + job_city,
+               data = resume,
+               family = binomial)
+```
+
+---
+
+
+```r
+tidy(model_ryc)
+```
+
+```
+## # A tibble: 4 x 5
+##   term             estimate std.error statistic  p.value
+##   &lt;chr&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)       -2.78     0.134      -20.8  6.18e-96
+## 2 racewhite          0.440    0.108        4.09 4.39e- 5
+## 3 years_experience   0.0332   0.00940      3.53 4.11e- 4
+## 4 job_cityChicago   -0.329    0.108       -3.04 2.33e- 3
+```
+
+---
+
+The estimated probability that a Black candidate with 10 years of experience, residing in Boston, would receive a callback.
+
+`\(\large{\hat\pi_i = \frac{e^{-2.78 + (0.0440 \times 0) + (0.0332\times10) + (-0.0329\times 0)}}{1+e^{-2.78 + (0.0440 \times 0) + (0.0332\times10) + (-0.0329\times 0)}} = 0.0796}\)`
+
+
+
+---
+
+We have used the data for educational purposes. The original study considers many other variables that may influence whether someone receives a callback or not. Read the original study for other considerations.
+
+[Are Emily and Greg More Employable than Lakisha and Jamal? A Field Experiment on Labor Market Discrimination](https://www.nber.org/papers/w9873). 
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "pygments",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
