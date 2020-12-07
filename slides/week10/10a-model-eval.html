@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Model Evaluation and Validation</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Mine Dogucu" />
+    <script src="10a-model-eval_files/header-attrs-2.5/header-attrs.js"></script>
+    <link rel="stylesheet" href="slide-style.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+class: title-slide
+
+
+&lt;br&gt;
+&lt;br&gt;
+.pull-right[ 
+
+# Model Evaluation and Validation
+## Dr. Mine Dogucu
+]
+
+---
+
+
+
+
+
+
+```r
+glimpse(babies)
+```
+
+```
+## Rows: 1,236
+## Columns: 8
+## $ case      &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+## $ bwt       &lt;int&gt; 120, 113, 128, 123, 108, 136, 138, 132, 120, 143, 140, 144,…
+## $ gestation &lt;int&gt; 284, 282, 279, NA, 282, 286, 244, 245, 289, 299, 351, 282, …
+## $ parity    &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ age       &lt;int&gt; 27, 33, 28, 36, 23, 25, 33, 23, 25, 30, 27, 32, 23, 36, 30,…
+## $ height    &lt;int&gt; 62, 64, 64, 69, 67, 62, 62, 65, 62, 66, 68, 64, 63, 61, 63,…
+## $ weight    &lt;int&gt; 100, 135, 115, 190, 125, 93, 178, 140, 125, 136, 120, 124, …
+## $ smoke     &lt;int&gt; 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 1,…
+```
+
+---
+
+
+```r
+model_g &lt;- lm(bwt ~ gestation, data = babies)
+tidy(model_g)
+```
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)  -10.1      8.32       -1.21 2.27e- 1
+## 2 gestation      0.464    0.0297     15.6  3.22e-50
+```
+
+---
+
+
+```r
+glance(model_g)
+```
+
+```
+## # A tibble: 1 x 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik    AIC    BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1     0.166         0.166  16.7      244. 3.22e-50     1 -5175. 10356. 10371.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
+
+---
+
+
+```r
+glance(model_g)$r.squared
+```
+
+```
+## [1] 0.1663449
+```
+
+16% of the variation in birth weight is explained by gestation. Higher values of R squared is preferred.
+
+&lt;img src="10a-model-eval_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="10a-model-eval_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+model_gsa &lt;- lm(bwt ~ gestation + smoke + age, data = babies)
+```
+
+
+---
+
+## Adjusted R-Squared
+
+.pull-left[
+
+```r
+glance(model_g)
+```
+
+```
+## # A tibble: 1 x 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik    AIC    BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1     0.166         0.166  16.7      244. 3.22e-50     1 -5175. 10356. 10371.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
+]
+
+.pull-right[
+
+```r
+glance(model_gsa)
+```
+
+```
+## # A tibble: 1 x 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik    AIC    BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1     0.212         0.210  16.2      108. 3.45e-62     3 -5089. 10187. 10213.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
+]
+
+
+---
+
+
+```r
+babies %&gt;% 
+  add_predictions(model_g) %&gt;% 
+  add_residuals(model_g) %&gt;% 
+  select(bwt, pred, resid)
+```
+
+```
+## # A tibble: 1,236 x 3
+##      bwt  pred  resid
+##    &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1   120  122.  -1.79
+##  2   113  121.  -7.86
+##  3   128  119.   8.53
+##  4   123   NA   NA   
+##  5   108  121. -12.9 
+##  6   136  123.  13.3 
+##  7   138  103.  34.8 
+##  8   132  104.  28.3 
+##  9   120  124.  -4.11
+## 10   143  129.  14.2 
+## # … with 1,226 more rows
+```
+
+
+---
+
+
+```r
+babies %&gt;% 
+  add_predictions(model_gsa) %&gt;% 
+  add_residuals(model_gsa) %&gt;% 
+  select(bwt, pred, resid)
+```
+
+```
+## # A tibble: 1,236 x 3
+##      bwt  pred  resid
+##    &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1   120  125.  -4.80
+##  2   113  125. -11.5 
+##  3   128  115.  13.3 
+##  4   123   NA   NA   
+##  5   108  115.  -7.47
+##  6   136  125.  10.5 
+##  7   138  108.  30.4 
+##  8   132  107.  25.0 
+##  9   120  127.  -6.81
+## 10   143  124.  19.2 
+## # … with 1,226 more rows
+```
+
+---
+
+## Root Mean Square Error
+
+`\(RMSE = \sqrt{\frac{\Sigma_{i=1}^n(y_i-\hat y_i)^2}{n}}\)`
+---
+
+
+```r
+modelr::rmse(model_gsa, babies)
+```
+
+```
+## [1] 16.1687
+```
+
+
+```r
+modelr::rmse(model_g, babies)
+```
+
+```
+## [1] 16.6512
+```
+
+---
+
+
+```r
+model_full &lt;- lm(bwt ~ gestation + parity + age +
+                   height + weight + smoke, 
+                 data = babies)
+```
+
+
+```r
+modelr::rmse(model_full, babies)
+```
+
+```
+## [1] 15.78198
+```
+
+
+```r
+glance(model_full)$r.squared
+```
+
+```
+## [1] 0.2579535
+```
+
+Can we keep adding all the variables and try to get an EXCELLENT model fit?
+
+---
+
+## Overfitting
+
+- We are fitting the model to sample data.
+
+- Our goal is to understand the population data.
+
+- If we make our model too perfect for our sample data, the model may not perform as well with other sample data from the population.
+
+- In this case we would be overfitting the data.
+
+- We can use **model validation** techniques.
+
+---
+
+## Splitting the Data (Train vs. Test)
+
+
+```r
+set.seed(12345)
+babies_split &lt;- rsample::initial_split(babies) ## 75% to 25% split
+```
+
+--
+
+
+```r
+babies_train &lt;- rsample::training(babies_split)
+dim(babies_train)
+```
+
+```
+## [1] 927   8
+```
+
+--
+
+
+```r
+babies_test &lt;- rsample::testing(babies_split)
+dim(babies_test)
+```
+
+```
+## [1] 309   8
+```
+
+---
+
+
+```r
+model_gsa_train &lt;- lm(bwt ~ gestation + smoke + age, data = babies_train)
+
+model_gsa_test &lt;- lm(bwt ~ gestation + smoke + age, data = babies_test)
+```
+
+---
+
+.pull-left[
+
+```r
+glance(model_gsa_train)
+```
+
+```
+## # A tibble: 1 x 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.209         0.206  16.1      79.5 1.19e-45     3 -3811. 7632. 7656.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
+]
+
+.pull-right[
+
+```r
+glance(model_gsa_test)
+```
+
+```
+## # A tibble: 1 x 12
+##   r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+##       &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     0.229         0.221  16.4      29.6 8.62e-17     3 -1276. 2561. 2580.
+## # … with 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;
+```
+]
+
+
+---
+
+.pull-left[
+
+```r
+modelr::rmse(model_gsa_train, babies_train)
+```
+
+```
+## [1] 16.09232
+```
+]
+
+.pull-right[
+
+```r
+modelr::rmse(model_gsa_test, babies_test)
+```
+
+```
+## [1] 16.29977
+```
+]
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9",
+"highlightStyle": "pygments",
+"highlightLines": true,
+"highlightLanguage": "r"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

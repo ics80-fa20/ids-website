@@ -1,0 +1,235 @@
+---
+title: "Model Evaluation and Validation"
+author: "Dr. Mine Dogucu"
+output: 
+  xaringan::moon_reader:
+    css: slide-style.css
+    seal: false
+    nature:
+      ratio: 16:9
+      highlightStyle: "pygments"
+      highlightLines: true
+      highlightLanguage: "r"
+    anchor_sections: FALSE
+---
+
+class: title-slide
+
+
+<br>
+<br>
+.pull-right[ 
+
+# `r rmarkdown::metadata$title`
+## `r rmarkdown::metadata$author`
+]
+
+---
+
+```{r echo = FALSE, message = FALSE}
+library(tidyverse)
+library(openintro)
+library(broom)
+library(modelr)
+theme_set(theme_gray(base_size = 18))
+```
+
+
+
+```{r}
+glimpse(babies)
+```
+
+---
+
+```{r}
+model_g <- lm(bwt ~ gestation, data = babies)
+tidy(model_g)
+```
+
+---
+
+```{r}
+glance(model_g)
+```
+
+---
+
+```{r}
+glance(model_g)$r.squared
+```
+
+16% of the variation in birth weight is explained by gestation. Higher values of R squared is preferred.
+
+```{r echo = FALSE, fig.align='center', message=FALSE, warning = FALSE, fig.height = 4}
+babies %>% 
+  ggplot() +
+  aes(x = gestation, y = bwt) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) 
+    
+```
+
+---
+
+```{r echo = FALSE, fig.align='center', message=FALSE, warning = FALSE, fig.height = 4}
+babies %>% 
+  ggplot() +
+  aes(x = gestation, y = bwt) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) 
+    
+```
+
+---
+
+```{r}
+model_gsa <- lm(bwt ~ gestation + smoke + age, data = babies)
+
+```
+
+
+---
+
+## Adjusted R-Squared
+
+.pull-left[
+```{r}
+glance(model_g)
+
+```
+]
+
+.pull-right[
+```{r}
+glance(model_gsa)
+```
+]
+
+
+---
+
+```{r}
+babies %>% 
+  add_predictions(model_g) %>% 
+  add_residuals(model_g) %>% 
+  select(bwt, pred, resid)
+```
+
+
+---
+
+```{r}
+babies %>% 
+  add_predictions(model_gsa) %>% 
+  add_residuals(model_gsa) %>% 
+  select(bwt, pred, resid)
+```
+
+---
+
+## Root Mean Square Error
+
+$RMSE = \sqrt{\frac{\Sigma_{i=1}^n(y_i-\hat y_i)^2}{n}}$
+---
+
+```{r}
+modelr::rmse(model_gsa, babies)
+```
+
+```{r}
+modelr::rmse(model_g, babies)
+```
+
+---
+
+```{r}
+model_full <- lm(bwt ~ gestation + parity + age +
+                   height + weight + smoke, 
+                 data = babies)
+```
+
+```{r}
+modelr::rmse(model_full, babies)
+```
+
+```{r}
+glance(model_full)$r.squared
+```
+
+Can we keep adding all the variables and try to get an EXCELLENT model fit?
+
+---
+
+## Overfitting
+
+- We are fitting the model to sample data.
+
+- Our goal is to understand the population data.
+
+- If we make our model too perfect for our sample data, the model may not perform as well with other sample data from the population.
+
+- In this case we would be overfitting the data.
+
+- We can use **model validation** techniques.
+
+---
+
+## Splitting the Data (Train vs. Test)
+
+```{r message=FALSE}
+set.seed(12345)
+babies_split <- rsample::initial_split(babies) ## 75% to 25% split
+```
+
+--
+
+```{r}
+babies_train <- rsample::training(babies_split)
+dim(babies_train)
+```
+
+--
+
+```{r}
+babies_test <- rsample::testing(babies_split)
+dim(babies_test)
+```
+
+---
+
+```{r}
+model_gsa_train <- lm(bwt ~ gestation + smoke + age, data = babies_train)
+
+model_gsa_test <- lm(bwt ~ gestation + smoke + age, data = babies_test)
+```
+
+---
+
+.pull-left[
+```{r}
+glance(model_gsa_train)
+```
+]
+
+.pull-right[
+```{r}
+glance(model_gsa_test)
+```
+]
+
+
+---
+
+.pull-left[
+```{r}
+modelr::rmse(model_gsa_train, babies_train)
+```
+]
+
+.pull-right[
+```{r}
+modelr::rmse(model_gsa_test, babies_test)
+```
+]
+
