@@ -297,7 +297,7 @@ model_r <- glm(received_callback ~ race,
 tidy(model_r)
 ```
 
-$log(\frac{\pi_i}{1-\pi_i}) = -2.67 + 0.438\times racewhite_i$
+$log(\frac{\hat \pi_i}{1-\hat \pi_i}) = -2.67 + 0.438\times racewhite_i$
 
 ---
 
