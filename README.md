@@ -15,7 +15,7 @@ Fall 2020
 
 This course introduces the full data cycle. Topics include data collection and retrieval, data cleaning, exploratory analysis and visualization, introduction to statistical modeling and inference, and communicating findings. Applications include real data from wide-range of fields following reproducible practices. 
 
-Course website is hosted at [introdata.science](https://introdata.science).
+Course website is hosted at [https://ics80-fa20.netlify.app/](https://ics80-fa20.netlify.app/).
 
 <hr>
 
