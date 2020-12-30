@@ -21,7 +21,7 @@ Course website is hosted at [https://ics80-fa20.netlify.app/](https://ics80-fa20
 
 **Students** if you see anything missing or broken links please feel free to file an issue in this repo or let me know. Note that this is a public repo so if you create an issue it would be publicly be available. If you are concerned about privacy you can directly email me.
 
-**Instructors** if you are planning to use any of the website design or resources (except the videos) feel free to do so but please attribute accordingly. Videos can be used by providing links directly to the YouTube video.
+**Instructors** if you are planning to use any of the website design or resources (except the videos) feel free to do so but please attribute accordingly. 
 
 Everything on this website except the videos are licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](http://creativecommons.org/licenses/by-nc-sa/4.0/).
 
